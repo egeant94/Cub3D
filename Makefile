@@ -6,7 +6,7 @@
 #    By: osboxes <osboxes@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/12 15:21:23 by egeant            #+#    #+#              #
-#    Updated: 2020/01/27 12:54:04 by osboxes          ###   ########.fr        #
+#    Updated: 2020/02/24 10:26:40 by osboxes          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ SRCS	= $(addprefix $(SDIR),$(SOURCES))
 OBJS	= $(addprefix $(ODIR),$(SOURCES:.c=.o))
 LIBFT	= ./libft/libft.a
 MLXFLAGS= -L/home/osboxes/42/Cub3D/minilibx -lm -lmlx_Linux -lbsd -lXext -lX11
-CFLAGS	= -Wall -Wextra -Werror
+CFLAGS	= -Wall -Wextra -Werror -fsanitize=address
 CC		= gcc
 NAME	= Cub3d
 RM		= rm -f
