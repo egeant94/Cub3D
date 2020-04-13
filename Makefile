@@ -13,7 +13,7 @@
 SDIR	= srcs/
 ODIR	= obj/
 HEADERS	= includes
-SOURCES	= helloworld.c
+SOURCES	= raycasterflat.c
 SRCS	= $(addprefix $(SDIR),$(SOURCES))
 OBJS	= $(addprefix $(ODIR),$(SOURCES:.c=.o))
 LIBFT	= ./libft/libft.a
