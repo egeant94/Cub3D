@@ -17,7 +17,7 @@ SOURCES	= helloworld.c
 SRCS	= $(addprefix $(SDIR),$(SOURCES))
 OBJS	= $(addprefix $(ODIR),$(SOURCES:.c=.o))
 LIBFT	= ./libft/libft.a
-MLXFLAGS= -L/home/osboxes/42/Cub3D/minilibx -lm -lmlx_Linux -lbsd -lXext -lX11
+MLXFLAGS= -L./minilibx-linux -lm -lmlx_Linux -lbsd -lXext -lX11
 CFLAGS	= -Wall -Wextra -Werror -fsanitize=address
 CC		= gcc
 NAME	= Cub3d
@@ -27,6 +27,7 @@ all:	$(NAME)
 
 $(NAME):	$(OBJS)
 			@make -C libft
+			@make -C minilibx-linux
 			@gcc $(CFLAGS) $(OBJS) $(MLXFLAGS) $(LIBFT) -o $(NAME)
 			
 $(ODIR)%.o: $(SDIR)%.c
@@ -41,6 +42,7 @@ clean:
 fclean: clean
 		@$(RM) $(NAME)
 		@make fclean -C libft
+		@make clean -C minilibx-linux
 
 re:	fclean all
 

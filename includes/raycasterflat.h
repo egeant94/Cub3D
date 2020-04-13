@@ -11,12 +11,12 @@
 /* ************************************************************************** */
 
 #ifndef RAYCASTERFLAT_H
-# define RAYCASTERFLAT_H
-# include <stdlib.h>
-# include <stdio.h>
-# include <mlx.h>
-# include "../libft/libft.h"
-# include <math.h>
-# include <string.h>
+#define RAYCASTERFLAT_H
+#include <stdlib.h>
+#include <stdio.h> //a enlever
+#include <mlx.h>
+#include "../libft/libft.h"
+#include <math.h>
+#include <string.h>
 
 #endif
