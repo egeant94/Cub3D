@@ -11,9 +11,9 @@
 /* ************************************************************************** */
 
 #include "../includes/raycasterflat.h"
-#define screenWidth 100
+#define screenWidth 3
 #define screenHeight 100
-#define map_max 5
+#define map_max 6
 #define FOV 90
 typedef struct s_camera
 {
@@ -132,9 +132,16 @@ float min_ray_dist(t_camera *cam, int worldMap[6][6], float angle)
 		x_intercept.x += (- cam->player_dx);
 		x_intercept.y += cam->player_dx * tan(rad_angle) * cam->tile_step_y;
 	}
-	//while pas bon
-	while (x_intercept.x < map_max && x_intercept.y < map_max && x_intercept.x >= 0 && x_intercept.y >= 0 && worldMap[(int)x_intercept.y][(int)x_intercept.x])
+	while (x_intercept.x < map_max && x_intercept.y < map_max && x_intercept.x >= 0 && x_intercept.y >= 0)
 	{
+		if (cam->tile_step_x == - 1)
+		{
+			if (worldMap[(int)x_intercept.y][(int)x_intercept.x - 1] == 1)
+				break ;
+		}
+		else
+			if (worldMap[(int)x_intercept.y][(int)x_intercept.x] == 1)
+				break ;
 		x_intercept.x += cam->tile_step_x;
 		x_intercept.y += cam->tile_step_x * tan(rad_angle);
 	}
@@ -151,15 +158,23 @@ float min_ray_dist(t_camera *cam, int worldMap[6][6], float angle)
 		y_intercept.x += (cam->player_dy) / tan(rad_angle) * cam->tile_step_x;
 		y_intercept.y += (-cam->player_dy);
 	}
-	//while pas bon
-	while (y_intercept.x < map_max && y_intercept.y < map_max && y_intercept.x >= 0 && y_intercept.y >= 0 && worldMap[(int)y_intercept.y][(int)y_intercept.x])
+	while (y_intercept.x < map_max && y_intercept.y < map_max && y_intercept.x >= 0 && y_intercept.y >= 0)
 	{
-		y_intercept.x += cam->tile_step_y;
-		y_intercept.y += cam->tile_step_y * tan(rad_angle);
+		if (cam->tile_step_y == - 1)
+		{
+			if (worldMap[(int)y_intercept.y - 1][(int)y_intercept.x] == 1)
+				break ;
+		}
+		else
+			if (worldMap[(int)y_intercept.y][(int)y_intercept.x] == 1)
+				break ;
+		y_intercept.x += cam->tile_step_y / tan(rad_angle);
+		y_intercept.y += cam->tile_step_y;
 	}
-	//semble bon
-	hor_dist = sqrt(pow(x_intercept.x - cam->player_x + cam->player_dx, 2) + pow(x_intercept.y - cam->player_y + cam->player_dy, 2));
-	ver_dist = sqrt(pow(y_intercept.x - cam->player_x + cam->player_dx, 2) + pow(y_intercept.y - cam->player_y + cam->player_dy, 2));
+	if (worldMap[0][0] == 1)
+		(void)worldMap;
+	hor_dist = sqrt(pow(x_intercept.x - (cam->player_x + cam->player_dx), 2) + pow(x_intercept.y - (cam->player_y + cam->player_dy), 2));
+	ver_dist = sqrt(pow(y_intercept.x - (cam->player_x + cam->player_dx), 2) + pow(y_intercept.y - (cam->player_y + cam->player_dy), 2));
 	if (hor_dist < ver_dist)
 		return (hor_dist);
 	else
@@ -178,9 +193,11 @@ void calculate_first_frame(t_mlx_data *mlx, t_camera *cam, int worldMap[6][6])
 								  &mlx->line_length, &mlx->endian);
 	while (column < screenWidth)
 	{
-		cam->theta_ang -= ((float)FOV / (float)screenWidth);
 		quadrant_theta = angle_to_quadrant(&cam->theta_ang, cam);
-		min_ray_dist(cam, worldMap, quadrant_theta);
+		printf("%7.2f ", cam->theta_ang);
+		printf("%f\n", min_ray_dist(cam, worldMap, quadrant_theta));
+		// min_ray_dist(cam, worldMap, quadrant_theta);
+		cam->theta_ang -= ((float)FOV / ((float)screenWidth - 1.0));
 		column++;
 	}
 }
