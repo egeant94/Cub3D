@@ -11,10 +11,11 @@
 /* ************************************************************************** */
 
 #include "../includes/raycasterflat.h"
-#define screenWidth 3
-#define screenHeight 100
+#define screenWidth 1000
+#define screenHeight 1000
 #define map_max 6
 #define FOV 90
+#define WALL_HEIGHT 0.3
 typedef struct s_camera
 {
 	int player_x;
@@ -52,13 +53,13 @@ typedef struct s_coordinates
 
 void init_camera(t_camera *cam)
 {
-	cam->player_x = 4;
+	cam->player_x = 1;
 	cam->player_y = 3;
 	cam->player_dx = 0.5;
-	cam->player_dy = 0.5;
+	cam->player_dy = 0;
 	cam->dir_x = 0;
 	cam->dir_y = -1;
-	cam->beta_ang = 90;
+	cam->beta_ang = 160;
 	cam->theta_ang = 0;
 	cam->x_intercept = 0;
 	cam->y_intercept = 0;
@@ -110,6 +111,17 @@ float angle_to_quadrant(float *angle, t_camera *cam)
 	return ((90 - (*angle - 270)));
 }
 
+float	quadrant_to_angle(float *angle, t_camera *cam)
+{
+	if (cam->tile_step_x == 1 && cam->tile_step_y == -1)
+		return (*angle);
+	if (cam->tile_step_x == -1 && cam->tile_step_y == -1)
+		return (180 - *angle);
+	if (cam->tile_step_x == -1 && cam->tile_step_y == 1)
+		return ((*angle + 180));
+	return (360 - *angle);
+}
+
 float min_ray_dist(t_camera *cam, int worldMap[6][6], float angle)
 {
 	t_coordinates x_intercept;
@@ -118,7 +130,7 @@ float min_ray_dist(t_camera *cam, int worldMap[6][6], float angle)
 	float ver_dist;
 	float rad_angle;
 
-	rad_angle = angle * M_PI / 180;
+	rad_angle = angle * M_PI / 180.0;
 	x_intercept.x = cam->player_x + cam->player_dx;
 	x_intercept.y = cam->player_y + cam->player_dy;
 
@@ -176,9 +188,37 @@ float min_ray_dist(t_camera *cam, int worldMap[6][6], float angle)
 	hor_dist = sqrt(pow(x_intercept.x - (cam->player_x + cam->player_dx), 2) + pow(x_intercept.y - (cam->player_y + cam->player_dy), 2));
 	ver_dist = sqrt(pow(y_intercept.x - (cam->player_x + cam->player_dx), 2) + pow(y_intercept.y - (cam->player_y + cam->player_dy), 2));
 	if (hor_dist < ver_dist)
+	{
 		return (hor_dist);
+		printf("%f, %f, %f, %f |", angle, angle_to_quadrant(&cam->beta_ang, cam), hor_dist, fabs(quadrant_to_angle(&angle, cam) - cam->beta_ang));
+		// return (hor_dist * cos((quadrant_to_angle(&angle, cam) * M_PI / 180.00) - (cam->beta_ang * M_PI / 180.0)));
+		// return ((fabs(x_intercept.x - (cam->player_x + cam->player_dx))) * cos(angle_to_quadrant(&cam->beta_ang, cam) * M_PI / 180.0)
+				// + (fabs(x_intercept.y - (cam->player_y + cam->player_dy))) * sin(angle_to_quadrant(&cam->beta_ang, cam) * M_PI / 180.0));
+	}
 	else
-		return (ver_dist);
+	{
+		return(ver_dist);
+		printf("%f, %f, %f, %f |", angle, angle_to_quadrant(&cam->beta_ang, cam), ver_dist, fabs(quadrant_to_angle(&angle, cam) - cam->beta_ang));
+		// return (ver_dist * cos((quadrant_to_angle(&angle, cam) * M_PI / 180.00) - (cam->beta_ang * M_PI / 180.0)));
+		// return ((fabs(y_intercept.x - (cam->player_x + cam->player_dx))) * cos(angle_to_quadrant(&cam->beta_ang, cam) * M_PI / 180.0)
+				// + (fabs(y_intercept.y - (cam->player_y + cam->player_dy))) * sin(angle_to_quadrant(&cam->beta_ang, cam) * M_PI / 180.0));
+	}
+}
+
+void	print_vertical_line(t_mlx_data *mlx, int x, float dist)
+{
+	float		y;
+
+	y = 0;
+	while (y < screenHeight / 2)
+	{
+		if ((y / (screenHeight / 2)) * dist <= WALL_HEIGHT)
+		{
+			my_mlx_pixel_put(mlx, x, screenHeight / 2 + y, 0xFFFFFF00);
+			my_mlx_pixel_put(mlx, x, screenHeight / 2 - y, 0xFFFFFF00);
+		}
+		y++;
+	}
 }
 
 void calculate_first_frame(t_mlx_data *mlx, t_camera *cam, int worldMap[6][6])
@@ -194,12 +234,14 @@ void calculate_first_frame(t_mlx_data *mlx, t_camera *cam, int worldMap[6][6])
 	while (column < screenWidth)
 	{
 		quadrant_theta = angle_to_quadrant(&cam->theta_ang, cam);
-		printf("%7.2f ", cam->theta_ang);
-		printf("%f\n", min_ray_dist(cam, worldMap, quadrant_theta));
+		float dist = min_ray_dist(cam, worldMap, quadrant_theta);
+		print_vertical_line(mlx, column, dist);
+		printf("%6.2f, %f\n", cam->theta_ang, dist); 
 		// min_ray_dist(cam, worldMap, quadrant_theta);
 		cam->theta_ang -= ((float)FOV / ((float)screenWidth - 1.0));
 		column++;
 	}
+	mlx_put_image_to_window(mlx->mlx, mlx->win, mlx->img, 0, 0);
 }
 
 int main(void)
