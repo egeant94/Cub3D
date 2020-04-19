@@ -76,13 +76,11 @@ int	main(void)
 								  &mlx.line_length, &mlx.endian);
 	int	column = 0;
 	float ray_dist = 0.4;
-	float previous = ray_dist;
 	while (column < screenWidth)
 	{
 		print_vertical_line(&mlx, column, ray_dist);
 		ray_dist += 0.4 / (float)screenWidth;
 		printf("%f\n", ray_dist);
-		previous = ray_dist;
 		column++;
 	}
 	mlx_put_image_to_window(mlx.mlx, mlx.win, mlx.img, 0, 0);
