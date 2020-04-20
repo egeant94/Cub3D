@@ -11,8 +11,8 @@
 /* ************************************************************************** */
 
 #include "../includes/raycasterflat.h"
-#define screenWidth 1000
-#define screenHeight 1000
+#define screenWidth 1920
+#define screenHeight 1080
 #define map_max 6
 #define FOV 60
 #define WALL_HEIGHT 0.5
@@ -156,7 +156,7 @@ float min_ray_dist(t_camera *cam, int **worldMap, float angle)
 			if (worldMap[(int)x_intercept.y][(int)x_intercept.x] == 1)
 				break ;
 		x_intercept.x += cam->tile_step_x;
-		x_intercept.y += cam->tile_step_x * tan(rad_angle);
+		x_intercept.y += 1 * tan(rad_angle) * cam->tile_step_y;
 	}
 	y_intercept.x = cam->player_x + cam->player_dx;
 	y_intercept.y = cam->player_y + cam->player_dy;
@@ -181,7 +181,7 @@ float min_ray_dist(t_camera *cam, int **worldMap, float angle)
 		else
 			if (worldMap[(int)y_intercept.y][(int)y_intercept.x] == 1)
 				break ;
-		y_intercept.x += cam->tile_step_y / tan(rad_angle);
+		y_intercept.x += 1 / tan(rad_angle) * cam->tile_step_x;
 		y_intercept.y += cam->tile_step_y;
 	}
 	hor_dist = sqrt(pow(x_intercept.x - (cam->player_x + cam->player_dx), 2) + pow(x_intercept.y - (cam->player_y + cam->player_dy), 2));
@@ -189,7 +189,8 @@ float min_ray_dist(t_camera *cam, int **worldMap, float angle)
 	if (hor_dist < ver_dist)
 	{
 		cam->h_o_v = 1;
-		return (hor_dist * cos(fabs(quadrant_to_angle(&angle, cam) - cam->beta_ang) * M_PI / 180));
+		return(hor_dist);
+		// return (hor_dist * cos(fabs(quadrant_to_angle(&angle, cam) - cam->beta_ang) * M_PI / 180));
 		// return (hor_dist * cos((quadrant_to_angle(&angle, cam) * M_PI / 180.00) - (cam->beta_ang * M_PI / 180.0)));
 		// return ((fabs(x_intercept.x - (cam->player_x + cam->player_dx))) * cos(angle_to_quadrant(&cam->beta_ang, cam) * M_PI / 180.0)
 				// + (fabs(x_intercept.y - (cam->player_y + cam->player_dy))) * sin(angle_to_quadrant(&cam->beta_ang, cam) * M_PI / 180.0));
@@ -197,10 +198,11 @@ float min_ray_dist(t_camera *cam, int **worldMap, float angle)
 	else
 	{
 		cam->h_o_v = 2;
-		return(ver_dist * cos(fabs(quadrant_to_angle(&angle, cam) - cam->beta_ang) * M_PI / 180));
+		return(ver_dist);
+		// return(ver_dist * cos(fabs(quadrant_to_angle(&angle, cam) - cam->beta_ang) * M_PI / 180));
 		// return (ver_dist * cos((quadrant_to_angle(&angle, cam) * M_PI / 180.00) - (cam->beta_ang * M_PI / 180.0)));
 		// return ((fabs(y_intercept.x - (cam->player_x + cam->player_dx))) * cos(angle_to_quadrant(&cam->beta_ang, cam) * M_PI / 180.0)
-				// + (fabs(y_intercept.y - (cam->player_y + cam->player_dy))) * sin(angle_to_quadrant(&cam->beta_ang, cam) * M_PI / 180.0));
+		// 		+ (fabs(y_intercept.y - (cam->player_y + cam->player_dy))) * sin(angle_to_quadrant(&cam->beta_ang, cam) * M_PI / 180.0));
 	}
 }
 
@@ -244,9 +246,7 @@ void calculate_first_frame(t_mlx_data *mlx, t_camera *cam, int **worldMap)
 	while (column < screenWidth)
 	{
 		quadrant_theta = angle_to_quadrant(&cam->theta_ang, cam);
-		float dist = min_ray_dist(cam, worldMap, quadrant_theta);
-		print_vertical_line(mlx, column, dist, *cam);
-		// min_ray_dist(cam, worldMap, quadrant_theta);
+		print_vertical_line(mlx, column, min_ray_dist(cam, worldMap, quadrant_theta), *cam);
 		cam->theta_ang -= ((float)FOV / ((float)screenWidth - 1.0));
 		column++;
 	}
@@ -293,9 +293,9 @@ void		move(t_camera *cam, int **worldMap, int dir)
 		dir = 1;
 		temp_angle -= 90;
 	}	
-	temp.x = fabs(cos(angle_to_quadrant(&temp_angle, cam)) * SPEED_M) * dir * cam->tile_step_x;
-	temp.y = fabs(sin(angle_to_quadrant(&temp_angle, cam)) * SPEED_M) * dir * cam->tile_step_y;
-	if (worldMap[cam->player_y + (int)(cam->player_dy + temp.y)][cam->player_x + (int)(cam->player_dx + temp.x)])
+	temp.x = fabs(cos(angle_to_quadrant(&temp_angle, cam) * M_PI / 180.0) * SPEED_M) * dir * cam->tile_step_x;
+	temp.y = fabs(sin(angle_to_quadrant(&temp_angle, cam) * M_PI / 180.0) * SPEED_M) * dir * cam->tile_step_y;
+	if (worldMap[(int)(cam->player_y + cam->player_dy + temp.y)][(int)(cam->player_x + cam->player_dx + temp.x)])
 		return ;
 	cam->player_dx += temp.x;
 	cam->player_dy += temp.y;
