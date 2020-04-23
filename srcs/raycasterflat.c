@@ -15,8 +15,14 @@
 #define screenHeight 1000
 #define map_max 6
 #define FOV 80 //between 0 and 180
-#define WALL_HEIGHT 0.2
+#define WALL_HEIGHT 0.5
 #define SPEED_M 0.1
+typedef struct s_coordinates
+{
+	float x;
+	float y;
+} t_coord;
+
 typedef struct s_camera
 {
 	int player_x;
@@ -26,8 +32,8 @@ typedef struct s_camera
 	float h_o_v;
 	float beta_ang;
 	float theta_ang;
-	float x_intercept;
-	float y_intercept;
+	t_coord x_intercept;
+	t_coord y_intercept;
 	float x_step;
 	float y_step;
 	int tile_step_x;
@@ -47,12 +53,6 @@ typedef struct s_mlx_data
 	t_camera *cam;
 } t_mlx_data;
 
-typedef struct s_coordinates
-{
-	float x;
-	float y;
-} t_coordinates;
-
 void init_camera(t_camera *cam)
 {
 	cam->player_x = 4;
@@ -62,8 +62,10 @@ void init_camera(t_camera *cam)
 	cam->h_o_v = 0;
 	cam->beta_ang = 174;
 	cam->theta_ang = 0;
-	cam->x_intercept = 0;
-	cam->y_intercept = 0;
+	cam->x_intercept.x = 0;
+	cam->x_intercept.y = 0;
+	cam->y_intercept.x = 0;
+	cam->y_intercept.y = 0;
 	cam->x_step = 0;
 	cam->y_step = 0;
 	cam->tile_step_x = 0;
@@ -123,76 +125,63 @@ float	quadrant_to_angle(float *angle, t_camera *cam)
 	return (360 - *angle);
 }
 
+void	first_int(t_camera *cam, float rad, t_coord *x_inter, t_coord *y_inter)
+{
+	x_inter->x = cam->player_x + cam->player_dx;
+	x_inter->y = cam->player_y + cam->player_dy;
+	if (cam->tile_step_x == 1)
+	{
+		x_inter->x += 1.0 - cam->player_dx;
+		x_inter->y += (1.0 - cam->player_dx) * tan(rad) * cam->tile_step_y;
+	}
+	else
+	{
+		x_inter->x += (- cam->player_dx);
+		x_inter->y += cam->player_dx * tan(rad) * cam->tile_step_y;
+	}
+	y_inter->x = cam->player_x + cam->player_dx;
+	y_inter->y = cam->player_y + cam->player_dy;
+	if (cam->tile_step_y == 1)
+	{
+		y_inter->x += (1.0 - cam->player_dy) / tan(rad) * (float)cam->tile_step_x;
+		y_inter->y += 1.0 - cam->player_dy;
+	}
+	else
+	{
+		y_inter->x += (cam->player_dy) / tan(rad) * cam->tile_step_x;
+		y_inter->y += (-cam->player_dy);
+	}
+}
+
+void	hit_wall(t_camera *cam, float rad, int **worldMap)
+{
+	while (	cam->x_intercept.x >= 0 && cam->x_intercept.x < map_max &&
+			cam->x_intercept.y >= 0 && cam->x_intercept.y < map_max)
+	{
+		cam->x_intercept.x += cam->tile_step_x;
+		cam->x_intercept.y += tan(rad) * cam->tile_step_y;
+	}
+	while (	cam->y_intercept.x >= 0 && cam->y_intercept.x < map_max &&
+			cam->y_intercept.y >= 0 && cam->y_intercept.y < map_max)
+	{
+		cam->y_intercept.x += 1 / tan(rad) * cam->tile_step_x;
+		cam->y_intercept.y += cam->tile_step_y;
+	}
+	if (worldMap[0][0] == 0)
+		return ;
+}
+
 float min_ray_dist(t_camera *cam, int **worldMap, float angle)
 {
-	t_coordinates x_intercept;
-	t_coordinates y_intercept;
 	float hor_dist;
 	float ver_dist;
 	float rad_angle;
 
 	rad_angle = angle * M_PI / 180.0;
-	x_intercept.x = cam->player_x + cam->player_dx;
-	x_intercept.y = cam->player_y + cam->player_dy;
-	if (cam->tile_step_x == 1)
-	{
-		x_intercept.x += 1.0 - cam->player_dx;
-		x_intercept.y += (1.0 - cam->player_dx) * tan(rad_angle) * cam->tile_step_y;
-	}
-	else
-	{
-		x_intercept.x += (- cam->player_dx);
-		x_intercept.y += cam->player_dx * tan(rad_angle) * cam->tile_step_y;
-	}
-	y_intercept.x = cam->player_x + cam->player_dx;
-	y_intercept.y = cam->player_y + cam->player_dy;
-	if (cam->tile_step_y == 1)
-	{
-		y_intercept.x += (1.0 - cam->player_dy) / tan(rad_angle) * (float)cam->tile_step_x;
-		y_intercept.y += 1.0 - cam->player_dy;
-	}
-	else
-	{
-		y_intercept.x += (cam->player_dy) / tan(rad_angle) * cam->tile_step_x;
-		y_intercept.y += (-cam->player_dy);
-	}
-	if (worldMap[0][0] == 0)
-		return (0);
-	// int x_check, y_check;
-	// if (cam->tile_step_x == 1)
-	// 	x_check = 0;
-	// else
-	// 	x_check = 1;
-	// if (cam->tile_step_y == 1)
-	// 	y_check = 0;
-	// else
-	// 	y_check = 1;
-	// while (1)
-	// {
-	// 	hor_dist = sqrt(pow(x_intercept.x - (cam->player_x + cam->player_dx), 2) + pow(x_intercept.y - (cam->player_y + cam->player_dy), 2));
-	// 	ver_dist = sqrt(pow(y_intercept.x - (cam->player_x + cam->player_dx), 2) + pow(y_intercept.y - (cam->player_y + cam->player_dy), 2));
-	// 	if (hor_dist < ver_dist)
-	// 	{
-	// 		if (worldMap[(int)x_intercept.y][(int)x_intercept.x - x_check] == 1)
-	// 			break ;
-	// 		if (worldMap[(int)y_intercept.y - y_check][(int)y_intercept.x] == 1)
-	// 			break ;
-	// 	}
-	// 	else
-	// 	{
-	// 		if (worldMap[(int)y_intercept.y - y_check][(int)y_intercept.x] == 1)
-	// 			break ;
-	// 		if (worldMap[(int)x_intercept.y][(int)x_intercept.x - x_check] == 1)
-	// 			break ;
-	// 	}		
-	// 	y_intercept.x += (1 / tan(rad_angle)) * cam->tile_step_x;
-	// 	y_intercept.y += cam->tile_step_y;
-	// 	x_intercept.x += cam->tile_step_x;
-	// 	x_intercept.y += tan(rad_angle) * (float)cam->tile_step_y;
-	// }
-
-	hor_dist = sqrt(pow(x_intercept.x - (cam->player_x + cam->player_dx), 2) + pow(x_intercept.y - (cam->player_y + cam->player_dy), 2));
-	ver_dist = sqrt(pow(y_intercept.x - (cam->player_x + cam->player_dx), 2) + pow(y_intercept.y - (cam->player_y + cam->player_dy), 2));
+	first_int(cam, rad_angle, &cam->x_intercept, &cam->y_intercept);
+	hit_wall(cam, rad_angle, worldMap);
+	hor_dist = sqrt(pow(cam->x_intercept.x - (cam->player_x + cam->player_dx), 2) + pow(cam->x_intercept.y - (cam->player_y + cam->player_dy), 2));
+	ver_dist = sqrt(pow(cam->y_intercept.x - (cam->player_x + cam->player_dx), 2) + pow(cam->y_intercept.y - (cam->player_y + cam->player_dy), 2));
 	if (hor_dist < ver_dist)
 	{
 		cam->h_o_v = 1;
@@ -202,6 +191,7 @@ float min_ray_dist(t_camera *cam, int **worldMap, float angle)
 	else
 	{
 		cam->h_o_v = 2;
+		// return(ver_dist);
 		return(ver_dist * cos(fabs(quadrant_to_angle(&angle, cam) - cam->beta_ang) * M_PI / 180));
 	}
 }
@@ -284,7 +274,7 @@ void		fix_player_pos(t_camera *cam)
 	
 void		move(t_camera *cam, int **worldMap, int dir)
 {
-	t_coordinates	temp;
+	t_coord	temp;
 	float			temp_angle;
 
 	temp_angle = cam->beta_ang;
