@@ -155,15 +155,32 @@ void	first_int(t_camera *cam, float rad, t_coord *x_inter, t_coord *y_inter)
 
 void	hit_wall(t_camera *cam, float rad, int **worldMap)
 {
-	while (	cam->x_intercept.x >= 0 && cam->x_intercept.x < map_max &&
+	int		x_check;
+	int		y_check;
+
+	cam->x_intercept.x = round(cam->x_intercept.x);
+	cam->y_intercept.y = round(cam->y_intercept.y);
+	if (cam->tile_step_x == 1)
+		x_check = 0;
+	else
+		x_check = -1;
+	if (cam->tile_step_y == 1)
+		y_check = 0;
+	else
+		y_check = -1;
+	while (	cam->x_intercept.x + x_check >= 0 && cam->x_intercept.x + x_check < map_max &&
 			cam->x_intercept.y >= 0 && cam->x_intercept.y < map_max)
 	{
+		if(worldMap[(int)cam->x_intercept.y][(int)cam->x_intercept.x + x_check] == 1)
+			break ;
 		cam->x_intercept.x += cam->tile_step_x;
 		cam->x_intercept.y += tan(rad) * cam->tile_step_y;
 	}
 	while (	cam->y_intercept.x >= 0 && cam->y_intercept.x < map_max &&
-			cam->y_intercept.y >= 0 && cam->y_intercept.y < map_max)
+			cam->y_intercept.y + y_check >= 0 && cam->y_intercept.y + y_check < map_max)
 	{
+		if(worldMap[(int)cam->y_intercept.y + y_check][(int)cam->y_intercept.x] == 1)
+			break ;
 		cam->y_intercept.x += 1 / tan(rad) * cam->tile_step_x;
 		cam->y_intercept.y += cam->tile_step_y;
 	}
@@ -279,22 +296,32 @@ void		move(t_camera *cam, int **worldMap, int dir)
 
 	temp_angle = cam->beta_ang;
 	if (dir == 2)
-	{
-		dir = 1;
 		temp_angle += 90;
-	}
 	if (dir == -2)
-	{
-		dir = 1;
 		temp_angle -= 90;
-	}	
+	if (dir == -2 || dir == 2)
+		dir = 1;
 	temp.x = fabs(cos(angle_to_quadrant(&temp_angle, cam) * M_PI / 180.0) * SPEED_M) * dir * cam->tile_step_x;
 	temp.y = fabs(sin(angle_to_quadrant(&temp_angle, cam) * M_PI / 180.0) * SPEED_M) * dir * cam->tile_step_y;
-	if (worldMap[(int)(cam->player_y + cam->player_dy + temp.y)][(int)(cam->player_x + cam->player_dx + temp.x)])
+	if (worldMap[(int)(cam->player_y + cam->player_dy + temp.y)][(int)(cam->player_x + cam->player_dx + temp.x)] != 1)
+	{
+		cam->player_dx += temp.x;
+		cam->player_dy += temp.y;
+		fix_player_pos(cam);
 		return ;
-	cam->player_dx += temp.x;
-	cam->player_dy += temp.y;
-	fix_player_pos(cam);
+	}
+	if (worldMap[(int)(cam->player_y + cam->player_dy + temp.y)][(int)(cam->player_x + cam->player_dx)] != 1)
+	{
+		cam->player_dy += temp.y;
+		fix_player_pos(cam);
+		return ;
+	}
+	if (worldMap[(int)(cam->player_y + cam->player_dy)][(int)(cam->player_x + cam->player_dx + temp.x)] != 1)
+	{
+		cam->player_dx += temp.x;
+		fix_player_pos(cam);
+		return ;
+	}
 }
 
 int	camera(int keycode, t_mlx_data *mlx)
