@@ -11,11 +11,11 @@
 /* ************************************************************************** */
 
 #include "../includes/raycasterflat.h"
-#define screenWidth 2000
-#define screenHeight 500
+#define screenWidth 1000
+#define screenHeight 1000
 #define map_max 6
-#define FOV 120
-#define WALL_HEIGHT 0.5
+#define FOV 80 //between 0 and 180
+#define WALL_HEIGHT 0.2
 #define SPEED_M 0.1
 typedef struct s_camera
 {
@@ -198,18 +198,11 @@ float min_ray_dist(t_camera *cam, int **worldMap, float angle)
 		cam->h_o_v = 1;
 		// return(hor_dist);
 		return (hor_dist * cos(fabs(quadrant_to_angle(&angle, cam) - cam->beta_ang) * M_PI / 180));
-		// return (hor_dist * cos((quadrant_to_angle(&angle, cam) * M_PI / 180.00) - (cam->beta_ang * M_PI / 180.0)));
-		// return ((fabs(x_intercept.x - (cam->player_x + cam->player_dx))) * cos(angle_to_quadrant(&cam->beta_ang, cam) * M_PI / 180.0)
-				// + (fabs(x_intercept.y - (cam->player_y + cam->player_dy))) * sin(angle_to_quadrant(&cam->beta_ang, cam) * M_PI / 180.0));
 	}
 	else
 	{
 		cam->h_o_v = 2;
-		// return(ver_dist);
 		return(ver_dist * cos(fabs(quadrant_to_angle(&angle, cam) - cam->beta_ang) * M_PI / 180));
-		// return (ver_dist * cos((quadrant_to_angle(&angle, cam) * M_PI / 180.00) - (cam->beta_ang * M_PI / 180.0)));
-		// return ((fabs(y_intercept.x - (cam->player_x + cam->player_dx))) * cos(angle_to_quadrant(&cam->beta_ang, cam) * M_PI / 180.0)
-		// 		+ (fabs(y_intercept.y - (cam->player_y + cam->player_dy))) * sin(angle_to_quadrant(&cam->beta_ang, cam) * M_PI / 180.0));
 	}
 }
 
@@ -244,17 +237,22 @@ void calculate_first_frame(t_mlx_data *mlx, t_camera *cam, int **worldMap)
 {
 	int column;
 	float quadrant_theta;
+	float	cam_plan;
+	float	plan_size;
 
 	column = 0;
-	cam->theta_ang = cam->beta_ang + (FOV / 2);
+	// cam->theta_ang = cam->beta_ang + (FOV / 2);
+	plan_size = tan((FOV / 2) * M_PI / 180.0);
+	cam_plan = plan_size;
 	mlx->img = mlx_new_image(mlx->mlx, screenWidth, screenHeight);
 	mlx->addr = mlx_get_data_addr(mlx->img, &mlx->bits_per_pixel,
 								  &mlx->line_length, &mlx->endian);
 	while (column < screenWidth)
 	{
+		cam->theta_ang = cam->beta_ang + atan(cam_plan) * 180.0 / M_PI;
 		quadrant_theta = angle_to_quadrant(&cam->theta_ang, cam);
 		print_vertical_line(mlx, column, min_ray_dist(cam, worldMap, quadrant_theta), *cam);
-		cam->theta_ang -= ((float)FOV / ((float)screenWidth - 1.0));
+		cam_plan = cam_plan - ((plan_size / (screenWidth - 1)) * 2);
 		column++;
 	}
 	mlx_put_image_to_window(mlx->mlx, mlx->win, mlx->img, 0, 0);
@@ -321,9 +319,9 @@ int	camera(int keycode, t_mlx_data *mlx)
 	if (keycode == 100)
 		move(mlx->cam, mlx->worldMap, -2); // d, right movement
 	if (keycode == 65361) //left arrow, camera moving to the left
-		mlx->cam->beta_ang += 2;
+		mlx->cam->beta_ang += 4;
 	if (keycode == 65363) //right arrow, camera moving to the right
-		mlx->cam->beta_ang -= 2;
+		mlx->cam->beta_ang -= 4;
 	printf("%f, %f\n", mlx->cam->player_x + mlx->cam->player_dx, mlx->cam->player_y + mlx->cam->player_dy);
 	angle_over_under(&mlx->cam->beta_ang);
 	calculate_first_frame(mlx, mlx->cam, mlx->worldMap);
