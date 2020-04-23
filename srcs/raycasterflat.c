@@ -11,12 +11,15 @@
 /* ************************************************************************** */
 
 #include "../includes/raycasterflat.h"
-#define screenWidth 1000
-#define screenHeight 1000
+#define screenWidth 1920
+#define screenHeight 1080
 #define map_max 6
-#define FOV 80 //between 0 and 180
+#define FOV 110 //between 0 and 180
 #define WALL_HEIGHT 0.5
 #define SPEED_M 0.1
+#define FLOOR 0xBBEFDECD
+#define CEILING 0x0000CCFF
+
 typedef struct s_coordinates
 {
 	float x;
@@ -226,7 +229,7 @@ void	print_vertical_line(t_mlx_data *mlx, int x, float dist, t_camera cam)
 	if (cam.h_o_v == 2 && cam.tile_step_y == -1)
 		color = 0x000000FF;
 	if (cam.h_o_v == 2 && cam.tile_step_y == 1)
-		color = 0x00FFFFFF;
+		color = 0x00FFF44F;
 	y = 0;
 	wall = (float)WALL_HEIGHT / dist;
 	while (y < screenHeight / 2)
@@ -237,6 +240,27 @@ void	print_vertical_line(t_mlx_data *mlx, int x, float dist, t_camera cam)
 			my_mlx_pixel_put(mlx, x, screenHeight / 2 - y, color);
 		}
 		y++;
+	}
+}
+
+void	floor_and_ceiling(t_mlx_data *mlx)
+{
+	int		x;
+	int		y;
+
+	x = 0;
+	while (x < screenWidth)
+	{
+		y = 0;
+		while (y < screenHeight)
+		{
+			if (y < screenHeight / 2)
+				my_mlx_pixel_put(mlx, x, y, CEILING);
+			else
+				my_mlx_pixel_put(mlx, x, y, FLOOR);
+			y++;
+		}
+		x++;
 	}
 }
 
@@ -254,6 +278,7 @@ void calculate_first_frame(t_mlx_data *mlx, t_camera *cam, int **worldMap)
 	mlx->img = mlx_new_image(mlx->mlx, screenWidth, screenHeight);
 	mlx->addr = mlx_get_data_addr(mlx->img, &mlx->bits_per_pixel,
 								  &mlx->line_length, &mlx->endian);
+	floor_and_ceiling(mlx);
 	while (column < screenWidth)
 	{
 		cam->theta_ang = cam->beta_ang + atan(cam_plan) * 180.0 / M_PI;
