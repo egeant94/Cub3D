@@ -3,17 +3,17 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: osboxes <osboxes@student.42.fr>            +#+  +:+       +#+         #
+#    By: user42 <user42@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/12 15:21:23 by egeant            #+#    #+#              #
-#    Updated: 2020/02/24 10:26:40 by osboxes          ###   ########.fr        #
+#    Updated: 2020/04/27 22:52:47 by user42           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 SDIR	= srcs/
 ODIR	= obj/
 HEADERS	= includes
-SOURCES	= raycasterflat.c
+SOURCES	= main.c ray_caster.c angles.c display.c movements.c
 SRCS	= $(addprefix $(SDIR),$(SOURCES))
 OBJS	= $(addprefix $(ODIR),$(SOURCES:.c=.o))
 LIBFT	= ./libft/libft.a
