@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/17 09:21:38 by osboxes           #+#    #+#             */
-/*   Updated: 2020/04/27 22:48:25 by user42           ###   ########.fr       */
+/*   Updated: 2020/04/30 12:23:55 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 # define MAP_MAX 6
 # define FOV 110
 # define WALL_HEIGHT 0.5
-# define SPEED_M 0.1
+# define SPEED_M 1
 # define FLOOR 0xBBEFDECD
 # define CEILING 0x0000CCFF
 # define M_PI 3.14159265358979323846
@@ -51,6 +51,16 @@ typedef struct	s_camera
 	int		tile_step_y;
 }				t_camera;
 
+typedef struct	s_movements
+{
+	int		forward;
+	int		backward;
+	int		left;
+	int		right;
+	int		cam_left;
+	int		cam_right;
+}				t_movements;
+
 typedef struct	s_mlx_data
 {
 	void		*mlx;
@@ -62,6 +72,7 @@ typedef struct	s_mlx_data
 	int			endian;
 	int			**world_map;
 	t_camera	*cam;
+	t_movements	*move;
 }				t_mlx_data;
 void			init_camera(t_camera *cam);
 void			my_mlx_pixel_put(t_mlx_data *mlx, int x, int y, int color);
@@ -76,11 +87,15 @@ float			min_ray_dist(t_camera *cam, int **world_map, float angle);
 void			print_vertical_line(t_mlx_data *mlx, int x,
 									float dist, t_camera cam);
 void			floor_and_ceiling(t_mlx_data *mlx);
-void			calculate_first_frame(t_mlx_data *mlx, t_camera *cam,
+void			frame_render(t_mlx_data *mlx, t_camera *cam,
 										int **world_map);
 void			fix_player_pos(t_camera *cam);
 void			change_player_pos(t_camera *cam, int **world_map, t_coord temp);
 void			move(t_camera *cam, int **world_map, int dir);
-int				camera(int keycode, t_mlx_data *mlx);
+int				key_press(int keycode, t_mlx_data *mlx);
+int				key_release(int keycode, t_mlx_data *mlx);
+int				renderer(t_mlx_data *mlx);
+void			init_movements(t_movements *move);
+int				quit(t_mlx_data *mlx);
 
 #endif
