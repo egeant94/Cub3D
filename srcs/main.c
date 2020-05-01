@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/17 09:18:23 by osboxes           #+#    #+#             */
-/*   Updated: 2020/04/30 12:12:59 by user42           ###   ########.fr       */
+/*   Updated: 2020/05/01 11:26:36 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,16 +67,19 @@ int		main(void)
 	t_camera	cam;
 	t_mlx_data	mlx;
 	t_movements	move;
+	t_settings	set;
 
 	mlx.world_map = create_map();
 	init_camera(&cam);
 	init_movements(&move);
-	mlx.mlx = mlx_init();
-	mlx.win = mlx_new_window(mlx.mlx, SCREEN_WIDTH,
-							SCREEN_HEIGHT, "raycasterflat");
-	frame_render(&mlx, &cam, mlx.world_map);
+	init_settings(&set);
 	mlx.cam = &cam;
 	mlx.move = &move;
+	mlx.set = &set;
+	mlx.mlx = mlx_init();
+	mlx.win = mlx_new_window(mlx.mlx, set.s_width,
+							set.s_height, "raycasterflat");
+	frame_render(&mlx, &cam, mlx.world_map);
 	mlx_hook(mlx.win, 17, 1L << 17, quit, &mlx);
 	mlx_hook(mlx.win, 2, 1L << 0, key_press, &mlx);
 	mlx_hook(mlx.win, 3, 1L << 1, key_release, &mlx);

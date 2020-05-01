@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/27 22:45:24 by user42            #+#    #+#             */
-/*   Updated: 2020/04/30 11:59:11 by user42           ###   ########.fr       */
+/*   Updated: 2020/05/01 11:24:21 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,17 +22,17 @@ void	frame_render(t_mlx_data *mlx, t_camera *cam, int **world_map)
 	column = 0;
 	plan_size = tan((FOV / 2) * M_PI / 180.0);
 	cam_plan = plan_size;
-	mlx->img = mlx_new_image(mlx->mlx, SCREEN_WIDTH, SCREEN_HEIGHT);
+	mlx->img = mlx_new_image(mlx->mlx, mlx->set->s_width, mlx->set->s_height);
 	mlx->addr = mlx_get_data_addr(mlx->img, &mlx->bits_per_pixel,
 								&mlx->line_length, &mlx->endian);
 	floor_and_ceiling(mlx);
-	while (column < SCREEN_WIDTH)
+	while (column < mlx->set->s_width)
 	{
 		cam->theta_ang = cam->beta_ang + atan(cam_plan) * 180.0 / M_PI;
 		quadrant_theta = angle_to_quadrant(&cam->theta_ang, cam);
 		print_vertical_line(mlx, column,
 						min_ray_dist(cam, world_map, quadrant_theta), *cam);
-		cam_plan = cam_plan - ((plan_size / (SCREEN_WIDTH - 1)) * 2);
+		cam_plan = cam_plan - ((plan_size / (mlx->set->s_width - 1)) * 2);
 		column++;
 	}
 	mlx_put_image_to_window(mlx->mlx, mlx->win, mlx->img, 0, 0);

@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/27 22:51:03 by user42            #+#    #+#             */
-/*   Updated: 2020/04/27 22:53:13 by user42           ###   ########.fr       */
+/*   Updated: 2020/05/01 12:05:02 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,12 +36,12 @@ void	print_vertical_line(t_mlx_data *mlx, int x, float dist, t_camera cam)
 		color = 0x00FFF44F;
 	y = 0;
 	wall = (float)WALL_HEIGHT / dist;
-	while (y < SCREEN_HEIGHT / 2)
+	while (y < mlx->set->s_height / 2)
 	{
-		if ((y / (SCREEN_HEIGHT / 2)) < wall)
+		if ((y / (mlx->set->s_height / 2)) < wall)
 		{
-			my_mlx_pixel_put(mlx, x, SCREEN_HEIGHT / 2 + y, color);
-			my_mlx_pixel_put(mlx, x, SCREEN_HEIGHT / 2 - y, color);
+			my_mlx_pixel_put(mlx, x, mlx->set->s_height / 2 + y, color);
+			my_mlx_pixel_put(mlx, x, mlx->set->s_height / 2 - y, color);
 		}
 		y++;
 	}
@@ -53,15 +53,15 @@ void	floor_and_ceiling(t_mlx_data *mlx)
 	int		y;
 
 	x = 0;
-	while (x < SCREEN_WIDTH)
+	while (x < mlx->set->s_width)
 	{
 		y = 0;
-		while (y < SCREEN_HEIGHT)
+		while (y < mlx->set->s_height)
 		{
-			if (y < SCREEN_HEIGHT / 2)
-				my_mlx_pixel_put(mlx, x, y, CEILING);
+			if (y < mlx->set->s_height / 2)
+				my_mlx_pixel_put(mlx, x, y, mlx->set->ceiling_c);
 			else
-				my_mlx_pixel_put(mlx, x, y, FLOOR);
+				my_mlx_pixel_put(mlx, x, y, mlx->set->floor_c);
 			y++;
 		}
 		x++;

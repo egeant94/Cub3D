@@ -6,25 +6,22 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/17 09:21:38 by osboxes           #+#    #+#             */
-/*   Updated: 2020/04/30 12:23:55 by user42           ###   ########.fr       */
+/*   Updated: 2020/05/01 13:55:58 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef RAYCASTERFLAT_H
 # define RAYCASTERFLAT_H
-# define SCREEN_WIDTH 1920
-# define SCREEN_HEIGHT 1080
 # define MAP_MAX 6
 # define FOV 110
 # define WALL_HEIGHT 0.5
 # define SPEED_M 1
-# define FLOOR 0xBBEFDECD
-# define CEILING 0x0000CCFF
 # define M_PI 3.14159265358979323846
 # include <stdlib.h>
 # include <stdio.h> //studio.h
 # include <mlx.h>
 # include "../libft/libft.h"
+# include "../printf/includes/ft_printf.h"
 # include <math.h>
 # include <string.h>
 
@@ -61,6 +58,14 @@ typedef struct	s_movements
 	int		cam_right;
 }				t_movements;
 
+typedef struct	s_settings
+{
+	int		s_width;
+	int		s_height;
+	int		floor_c;
+	int		ceiling_c;
+}				t_settings;
+
 typedef struct	s_mlx_data
 {
 	void		*mlx;
@@ -73,6 +78,7 @@ typedef struct	s_mlx_data
 	int			**world_map;
 	t_camera	*cam;
 	t_movements	*move;
+	t_settings	*set;
 }				t_mlx_data;
 void			init_camera(t_camera *cam);
 void			my_mlx_pixel_put(t_mlx_data *mlx, int x, int y, int color);
@@ -97,5 +103,5 @@ int				key_release(int keycode, t_mlx_data *mlx);
 int				renderer(t_mlx_data *mlx);
 void			init_movements(t_movements *move);
 int				quit(t_mlx_data *mlx);
-
+void			init_settings(t_settings *set);
 #endif
