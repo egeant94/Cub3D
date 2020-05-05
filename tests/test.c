@@ -78,18 +78,26 @@ int		my_mlx_pixel_reverse(t_texture *mlx, int x, int y)
 
 void	print_vertical_line(t_mlx_data *mlx, int x, float dist, t_texture *tex)
 {
-	float		y;
+	int			y;
 	float		wall;
+	float		wall_offset;
+	float		tex_y;
 
-	y = 0;
 	wall = (float)WALL_HEIGHT / dist;
-	while (y < screenHeight / 2)
-	{
-		if ((y / (screenHeight / 2)) < wall)
-		{
-			my_mlx_pixel_put(mlx, x, screenHeight / 2 - y, my_mlx_pixel_reverse(tex, x * tex->width / screenWidth, tex->height*(screenHeight/2 -y)/screenHeight));
-			my_mlx_pixel_put(mlx, x, screenHeight / 2 + y, my_mlx_pixel_reverse(tex, x * tex->width / screenWidth, tex->height*y/screenHeight + tex->height/2));
-		}
+	wall_offset = ((1 - wall) / 2) * screenHeight;
+	y = wall_offset;
+	if (wall_offset < 0)	
+		y = 0;
+	tex_y = 0;
+	if (wall_offset < 0)
+		tex_y = (wall - 1) / 2 * tex->height;
+	while (y < (screenHeight - wall_offset) && y < screenHeight)
+	{	
+		if (wall_offset > 0)
+			tex_y += tex->height / (screenHeight - wall_offset * 2);
+		else
+			tex_y += (tex->height - ((wall - 1) * tex->height)) / screenHeight;
+		my_mlx_pixel_put(mlx, x, y, my_mlx_pixel_reverse(tex, x * tex->width / screenWidth, (int)tex_y));
 		y++;
 	}
 }
@@ -105,7 +113,7 @@ int	main(void)
 	mlx.addr = mlx_get_data_addr(mlx.img, &mlx.bits_per_pixel,
 								  &mlx.line_length, &mlx.endian);
 	
-	char file[] = "textures/grass.xpm";
+	char file[] = "textures/dontusethisone.xpm";
 	tex.path = file;
 	tex.mlx = mlx.mlx;
 	tex.win = mlx.win;

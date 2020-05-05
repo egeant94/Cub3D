@@ -6,14 +6,16 @@
 #    By: user42 <user42@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/12 15:21:23 by egeant            #+#    #+#              #
-#    Updated: 2020/05/01 13:54:54 by user42           ###   ########.fr        #
+#    Updated: 2020/05/05 12:31:20 by user42           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-SDIR	= tests/
+SDIR	= srcs/
+# SDIR	= tests/
 ODIR	= obj/
 HEADERS	= includes
-SOURCES	= test.c
+SOURCES	= angles.c display.c main.c movements.c ray_caster.c settings.c key_hooks.c
+# SOURCES	= test.c
 SRCS	= $(addprefix $(SDIR),$(SOURCES))
 OBJS	= $(addprefix $(ODIR),$(SOURCES:.c=.o))
 LIBFT	= ./libft/libft.a
