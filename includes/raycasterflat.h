@@ -6,15 +6,14 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/17 09:21:38 by osboxes           #+#    #+#             */
-/*   Updated: 2020/05/05 14:09:11 by user42           ###   ########.fr       */
+/*   Updated: 2020/05/06 14:54:55 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef RAYCASTERFLAT_H
 # define RAYCASTERFLAT_H
 # define MAP_MAX 6
-# define FOV 10
-# define WALL_HEIGHT 0.8
+# define FOV 110
 # define SPEED_M 1
 # define M_PI 3.14159265358979323846
 # include <stdlib.h>
@@ -73,6 +72,7 @@ typedef struct	s_settings
 {
 	int			s_width;
 	int			s_height;
+	float		wall_height;
 	int			floor_c;
 	int			ceiling_c;
 	t_texture	north;

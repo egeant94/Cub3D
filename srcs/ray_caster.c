@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/27 22:45:24 by user42            #+#    #+#             */
-/*   Updated: 2020/05/05 14:06:11 by user42           ###   ########.fr       */
+/*   Updated: 2020/05/06 15:04:02 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	frame_render(t_mlx_data *mlx, t_camera *cam, int **world_map)
 	float	plan_size;
 
 	column = 0;
-	plan_size = tan((90 / 2) * M_PI / 180.0);
+	plan_size = tan((FOV / 2) * M_PI / 180.0);
 	cam_plan = plan_size;
 	mlx->img = mlx_new_image(mlx->mlx, mlx->set->s_width, mlx->set->s_height);
 	mlx->addr = mlx_get_data_addr(mlx->img, &mlx->bits_per_pixel,

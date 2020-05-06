@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/01 11:20:36 by user42            #+#    #+#             */
-/*   Updated: 2020/05/05 14:08:12 by user42           ###   ########.fr       */
+/*   Updated: 2020/05/06 15:01:57 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,15 +27,16 @@ int			get_texture(t_texture *tex, char *path, t_mlx_data *mlx)
 
 void		init_settings(t_settings *set, t_mlx_data *mlx)
 {
-	set->s_width = 1920;
-	set->s_height = 1080;
+	set->s_width = 500;
+	set->s_height = 500;
+	set->wall_height = (float)set->s_width / (float)set->s_height / 3.0;
 	set->floor_c = 0xBBEFDECD;
 	set->ceiling_c = 0x0000CCFF;
 	mlx->mlx = mlx_init();
 	mlx->win = mlx_new_window(mlx->mlx, set->s_width,
 							set->s_height, "raycasterflat");
-	get_texture(&set->north, "./textures/dontusethisone.xpm", mlx);
-	get_texture(&set->south, "./textures/dontusethisone.xpm", mlx);
+	get_texture(&set->north, "./textures/grass.xpm", mlx);
+	get_texture(&set->south, "./textures/grass.xpm", mlx);
 	get_texture(&set->west, "./textures/grass.xpm", mlx);
 	get_texture(&set->east, "./textures/grass.xpm", mlx);
 }
