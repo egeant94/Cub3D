@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/17 09:21:38 by osboxes           #+#    #+#             */
-/*   Updated: 2020/05/06 14:54:55 by user42           ###   ########.fr       */
+/*   Updated: 2020/05/07 17:20:50 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,4 +122,10 @@ int				quit(t_mlx_data *mlx);
 void			init_settings(t_settings *set, t_mlx_data *mlx);
 int				get_texture(t_texture *tex, char *path, t_mlx_data *mlx);
 int				my_mlx_pixel_reverse(t_texture *mlx, int x, int y);
+t_texture		*nwse_tex(t_camera cam, t_mlx_data *mlx);
+float			wall_offseter(float dist, t_texture *tex,
+							float *tex_y, t_mlx_data *mlx);
+int				init_y(float wall_offset);
+float			inc_tex_y(float w_o, t_texture *tex,
+							t_mlx_data *mlx, float dist);
 #endif

@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/27 22:51:03 by user42            #+#    #+#             */
-/*   Updated: 2020/05/06 14:54:13 by user42           ###   ########.fr       */
+/*   Updated: 2020/05/07 17:18:54 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,40 +23,26 @@ void	my_mlx_pixel_put(t_mlx_data *mlx, int x, int y, int color)
 void	print_vertical_line(t_mlx_data *mlx, int x, float dist, t_camera cam)
 {
 	float		y;
-	float		wall;
 	float		wall_offset;
 	float		tex_y;
 	t_texture	*tex;
 
-	if (cam.h_o_v == 2 && cam.tile_step_x == 1)
-		tex = &mlx->set->east;
-	if (cam.h_o_v == 2 && cam.tile_step_x == -1)
-		tex = &mlx->set->west;
-	if (cam.h_o_v == 1 && cam.tile_step_y == -1)
-		tex = &mlx->set->south;
-	if (cam.h_o_v == 1 && cam.tile_step_y == 1)
-		tex = &mlx->set->north;
-	wall = (float)mlx->set->wall_height / dist;
-	wall_offset = ((1 - wall) / 2) * mlx->set->s_height;
-	y = wall_offset;
-	if (wall_offset < 0)	
-		y = 0;
-	tex_y = 0;
-	if (wall_offset < 0)
-		tex_y = (1 - (1 / wall)) / 2 * tex->height;
+	tex = nwse_tex(cam, mlx);
+	wall_offset = wall_offseter(dist, tex, &tex_y, mlx);
+	y = init_y(wall_offset);
 	while (y < (mlx->set->s_height - wall_offset) && y < mlx->set->s_height)
-	{	
-		if (wall_offset > 0)
-			tex_y += tex->height / (mlx->set->s_height - wall_offset * 2);
-		else
-			tex_y += (1 / wall) * tex->height / mlx->set->s_height;
-		if (mlx->cam->h_o_v == 1)
+	{
+		tex_y += inc_tex_y(wall_offset, tex, mlx, dist);
+		if (cam.h_o_v == 1)
 		{
-			my_mlx_pixel_put(mlx, x, y, my_mlx_pixel_reverse(tex, (mlx->cam->y_intercept.x -(int)mlx->cam->y_intercept.x) * tex->width, (int)tex_y));
+			my_mlx_pixel_put(mlx, x, y, my_mlx_pixel_reverse(
+				tex, (cam.y_intercept.x - (int)cam.y_intercept.x)
+				* tex->width, (int)tex_y));
 		}
-		if (mlx->cam->h_o_v == 2)
-			my_mlx_pixel_put(mlx, x, y, my_mlx_pixel_reverse(tex,(mlx->cam->x_intercept.y -(int)mlx->cam->x_intercept.y) * tex->width, (int)tex_y));
-
+		if (cam.h_o_v == 2)
+			my_mlx_pixel_put(mlx, x, y, my_mlx_pixel_reverse(
+				tex, (cam.x_intercept.y - (int)cam.x_intercept.y)
+				* tex->width, (int)tex_y));
 		y++;
 	}
 }
