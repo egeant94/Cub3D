@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/27 22:51:03 by user42            #+#    #+#             */
-/*   Updated: 2020/05/07 17:18:54 by user42           ###   ########.fr       */
+/*   Updated: 2020/05/19 13:59:01 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,22 +27,29 @@ void	print_vertical_line(t_mlx_data *mlx, int x, float dist, t_camera cam)
 	float		tex_y;
 	t_texture	*tex;
 
+	if (dist == -1)
+		return ;
 	tex = nwse_tex(cam, mlx);
 	wall_offset = wall_offseter(dist, tex, &tex_y, mlx);
-	y = init_y(wall_offset);
-	while (y < (mlx->set->s_height - wall_offset) && y < mlx->set->s_height)
+	y = 0;
+	while (y < mlx->set->s_height)
 	{
-		tex_y += inc_tex_y(wall_offset, tex, mlx, dist);
-		if (cam.h_o_v == 1)
+		if (y < init_y(wall_offset) && y < mlx->set->s_height / 2)
+			my_mlx_pixel_put(mlx, x, y, mlx->set->ceiling_c);
+		else if (y > (mlx->set->s_height - wall_offset))
+			my_mlx_pixel_put(mlx, x, y, mlx->set->floor_c);
+		else
 		{
-			my_mlx_pixel_put(mlx, x, y, my_mlx_pixel_reverse(
-				tex, (cam.y_intercept.x - (int)cam.y_intercept.x)
-				* tex->width, (int)tex_y));
+			tex_y += inc_tex_y(wall_offset, tex, mlx, dist);
+			if (cam.h_o_v == 1)
+				my_mlx_pixel_put(mlx, x, y, my_mlx_pixel_reverse(
+					tex, (cam.y_intercept.x - (int)cam.y_intercept.x)
+					* tex->width, (int)tex_y));
+			if (cam.h_o_v == 2)
+				my_mlx_pixel_put(mlx, x, y, my_mlx_pixel_reverse(
+					tex, (cam.x_intercept.y - (int)cam.x_intercept.y)
+					* tex->width, (int)tex_y));
 		}
-		if (cam.h_o_v == 2)
-			my_mlx_pixel_put(mlx, x, y, my_mlx_pixel_reverse(
-				tex, (cam.x_intercept.y - (int)cam.x_intercept.y)
-				* tex->width, (int)tex_y));
 		y++;
 	}
 }
