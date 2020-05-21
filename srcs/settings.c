@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/01 11:20:36 by user42            #+#    #+#             */
-/*   Updated: 2020/05/20 16:12:46 by user42           ###   ########.fr       */
+/*   Updated: 2020/05/21 10:06:37 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,4 +39,5 @@ void		init_settings(t_settings *set, t_mlx_data *mlx)
 	get_texture(&set->south, "./textures/brick.xpm", mlx);
 	get_texture(&set->west, "./textures/metal.xpm", mlx);
 	get_texture(&set->east, "./textures/wood.xpm", mlx);
+	get_texture(&set->sprite, "./textures/dontusethisone.xpm", mlx);
 }

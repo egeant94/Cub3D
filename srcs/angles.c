@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/27 22:49:47 by user42            #+#    #+#             */
-/*   Updated: 2020/04/27 22:50:38 by user42           ###   ########.fr       */
+/*   Updated: 2020/05/21 11:28:17 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ float	angle_to_quadrant(float *angle, t_camera *cam)
 	cam->tile_step_y = 1;
 	return ((90 - (*angle - 270)));
 }
+
 
 float	quadrant_to_angle(float *angle, t_camera *cam)
 {

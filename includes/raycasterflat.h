@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/17 09:21:38 by osboxes           #+#    #+#             */
-/*   Updated: 2020/05/08 11:24:09 by user42           ###   ########.fr       */
+/*   Updated: 2020/05/21 11:28:23 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,5 +128,5 @@ float			wall_offseter(float dist, t_texture *tex,
 int				init_y(float wall_offset);
 float			inc_tex_y(float w_o, t_texture *tex,
 							t_mlx_data *mlx, float dist);
-float			ray_sprite(t_camera *cam, int **world_map, float angle);
+t_coord			ray_sprite(t_camera *cam, int **world_map, float angle);
 #endif
