@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/27 22:45:24 by user42            #+#    #+#             */
-/*   Updated: 2020/05/21 12:32:32 by user42           ###   ########.fr       */
+/*   Updated: 2020/05/21 14:22:04 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,7 +119,7 @@ t_coord	ray_sprite(t_camera *cam, int **world_map, float angle)
 
 float	width_deductor_2(t_coord hit, t_camera *cam)
 {
-	if (hit.y > cam->player_y + cam->player_dy)
+	if (hit.y < cam->player_y + cam->player_dy)
 	{
 		if (cam->h_o_v == 1)
 			return ((1 + (hit.x - (int)hit.x)) / 2);
@@ -152,9 +152,9 @@ float	width_deductor(t_coord hit, t_camera *cam)
 {
 	float	width;
 
-	if (hit.x > cam->player_x + cam->player_dx)
+	if (hit.x < cam->player_x + cam->player_dx)
 	{
-		if (hit.y > cam->player_y + cam->player_dy)
+		if (hit.y < cam->player_y + cam->player_dy)
 		{
 			if (cam->h_o_v == 1)
 				width = (hit.x - (int)hit.x) / 2;
@@ -210,14 +210,14 @@ t_coord		sprite_center(t_coord hit, t_camera *cam)
 	int		x_check;
 	int		y_check;
 
-	if (cam->tile_step_x == 1)
-		x_check = 0;
-	else
+	if (cam->tile_step_x == -1 && cam->h_o_v == 2)
 		x_check = -1;
-	if (cam->tile_step_y == 1)
-		y_check = 0;
 	else
+		x_check = 0;
+	if (cam->tile_step_y == -1 && cam->h_o_v == 1)
 		y_check = -1;
+	else
+		y_check = 0;
 	center.x = hit.x - (hit.x - (int)hit.x) + 0.5 + x_check;
 	center.y = hit.y - (hit.y - (int)hit.y) + 0.5 + y_check;
 	return (center);
@@ -235,14 +235,15 @@ void	print_sprite(t_mlx_data *mlx, int x, t_coord hit, t_camera *cam)
 	t = 0.5 * width_deductor(hit, cam);
 	center = sprite_center(hit, cam);
 	rad = cam->beta_ang + 90;
-	rad = angle_to_quadrant(&rad, cam) * 180 / M_PI;
-	sprite_1.x = center.x + cos(rad) * 0.5 * cam->tile_step_x;
-	sprite_1.y = center.y + sin(rad) * 0.5 * cam->tile_step_y;
+	rad = rad / 180 * M_PI;
+	sprite_1.x = center.x + (cos(rad) * 0.5);
+	sprite_1.y = center.y + (sin(rad) * 0.5);
+	printf("hit x: %f y: %f ", hit.x, hit.y);
 	hit.x = (1 - t) * sprite_1.x + (t * center.x);
 	hit.y = (1 - t) * sprite_1.y + (t * center.y);
-	printf("center x : %f, y : %d\n", center.x, cam->tile_step_x);
-	print_vertical_line(mlx, x, dist_calc(center, cam), *cam);
-	// vertical_sprite_line(dist_calc(hit, cam), t / 0.5, mlx, x);
+	printf("t: %f, hov : %f\n", t, cam->h_o_v);
+	// print_vertical_line(mlx, x, dist_calc(hit, cam), *cam);
+	vertical_sprite_line(dist_calc(hit, cam), t / 0.5, mlx, x);
 	
 }
 
