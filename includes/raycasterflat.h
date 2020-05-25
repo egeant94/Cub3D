@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/17 09:21:38 by osboxes           #+#    #+#             */
-/*   Updated: 2020/05/21 11:28:23 by user42           ###   ########.fr       */
+/*   Updated: 2020/05/25 15:15:11 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,8 @@ typedef struct	s_camera
 	float	y_step;
 	int		tile_step_x;
 	int		tile_step_y;
+	float	*dists;
+	t_coord	*sprites;
 }				t_camera;
 
 typedef struct	s_movements
@@ -103,13 +105,13 @@ float			angle_to_quadrant(float *angle, t_camera *cam);
 float			quadrant_to_angle(float *angle, t_camera *cam);
 void			first_int(t_camera *cam, float rad,
 							t_coord *x_inter, t_coord *y_inter);
-void			hit_hor(t_camera *cam, float rad, int **world_map);
-void			hit_wall(t_camera *cam, float rad, int **world_map);
+int				hit_hor(t_camera *cam, float rad, int **world_map);
+int				hit_wall(t_camera *cam, float rad, int **world_map);
 float			min_ray_dist(t_camera *cam, int **world_map, float angle);
 void			print_vertical_line(t_mlx_data *mlx, int x,
 									float dist, t_camera cam);
 void			floor_and_ceiling(t_mlx_data *mlx);
-void			frame_render(t_mlx_data *mlx, t_camera *cam,
+int				frame_render(t_mlx_data *mlx, t_camera *cam,
 										int **world_map);
 void			fix_player_pos(t_camera *cam);
 void			change_player_pos(t_camera *cam, int **world_map, t_coord temp);
@@ -129,4 +131,6 @@ int				init_y(float wall_offset);
 float			inc_tex_y(float w_o, t_texture *tex,
 							t_mlx_data *mlx, float dist);
 t_coord			ray_sprite(t_camera *cam, int **world_map, float angle);
+void			free_all(t_mlx_data *mlx, t_camera *cam);
+float			*dist_buffer(t_settings *set);
 #endif

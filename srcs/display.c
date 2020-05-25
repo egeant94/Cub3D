@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/27 22:51:03 by user42            #+#    #+#             */
-/*   Updated: 2020/05/21 10:04:30 by user42           ###   ########.fr       */
+/*   Updated: 2020/05/25 14:45:07 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,4 +100,5 @@ void	init_camera(t_camera *cam)
 	cam->y_step = 0;
 	cam->tile_step_x = 0;
 	cam->tile_step_y = 0;
+	cam->sprites = 0;
 }

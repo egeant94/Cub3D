@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/17 09:18:23 by osboxes           #+#    #+#             */
-/*   Updated: 2020/05/21 14:10:54 by user42           ###   ########.fr       */
+/*   Updated: 2020/05/25 15:21:34 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int		**create_map(void)
 		i++;
 	}
 	map[2][2] = 0;
-	map[2][3] = 0;
+	map[2][3] = 2;
 	map[2][1] = 0;
 	map[3][2] = 2;
 	i = 0;
@@ -79,7 +79,7 @@ int		main(void)
 	mlx.cam = &cam;
 	mlx.move = &move;
 	mlx.set = &set;
-	frame_render(&mlx, &cam, mlx.world_map);
+	// frame_render(&mlx, &cam, mlx.world_map);
 	mlx_hook(mlx.win, 17, 1L << 17, quit, &mlx);
 	mlx_hook(mlx.win, 2, 1L << 0, key_press, &mlx);
 	mlx_hook(mlx.win, 3, 1L << 1, key_release, &mlx);

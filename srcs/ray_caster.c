@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/27 22:45:24 by user42            #+#    #+#             */
-/*   Updated: 2020/05/21 14:25:05 by user42           ###   ########.fr       */
+/*   Updated: 2020/05/25 15:39:51 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,6 @@ int			is_sprite_here(t_coord hv, t_coord ho)
 	return (0);
 }
 	
-
 t_coord		hit_sprite(t_camera *cam, float rad, int **world_map)
 {
 	t_coord ver_hit;
@@ -107,7 +106,6 @@ t_coord		hit_sprite(t_camera *cam, float rad, int **world_map)
 	}
 }
 	
-
 t_coord	ray_sprite(t_camera *cam, int **world_map, float angle)
 {
 	float	rad_angle;
@@ -129,9 +127,9 @@ float	width_deductor_2(t_coord hit, t_camera *cam)
 	else
 	{
 		if (cam->h_o_v == 1)
-			return ((1 + (hit.x - (int)hit.x)) / 2);
+			return ((1 - (hit.x - (int)hit.x)) / 2);
 		else
-			return ((1 - (hit.y - (int)hit.y)) / 2);
+			return ((1 + (hit.y - (int)hit.y)) / 2);
 	}
 }
 
@@ -182,6 +180,7 @@ void	vertical_sprite_line(float dist, float width, t_mlx_data *mlx, int x)
 	t_texture	*tex;
 
 	tex = &mlx->set->sprite;
+	// width = 0;
 	wall_offset = wall_offseter(dist, tex, &tex_y, mlx);
 	y = init_y(wall_offset);
 	while (y < mlx->set->s_height && y < mlx->set->s_height - wall_offset)
@@ -196,11 +195,24 @@ void	vertical_sprite_line(float dist, float width, t_mlx_data *mlx, int x)
 float	dist_calc(t_coord hit, t_camera *cam)
 {
 	float	dist;
+	float	rad_ang;
+	float	rad_beta;
 
+	rad_beta = cam->beta_ang / 180 * M_PI;
 	dist = sqrt(pow(hit.x - (cam->player_x + cam->player_dx), 2) +
 			pow(hit.y - (cam->player_y + cam->player_dy), 2));
-	// dist = dist * cos(fabs(cam->theta_ang -
-	// 			cam->beta_ang) * M_PI / 180);
+	rad_ang = acos(fabs((cam->player_x + cam->player_dx) - hit.x) / dist);
+	if (cam->player_x + cam->player_dx > hit.x
+		&& cam->player_y + cam->player_dy > hit.y) 
+		rad_ang = M_PI - (rad_ang + rad_beta);
+	else if (cam->player_y + cam->player_dy < hit.y)
+		rad_ang = M_PI - rad_beta + rad_ang;
+	else if (cam->player_x + cam->player_dx < hit.x
+			&& cam->player_y + cam->player_dy < hit.y)
+		rad_ang = 2 * M_PI - (rad_beta + rad_ang);
+	else
+		rad_ang = rad_beta - rad_ang;
+	dist = fabs(dist * cos(rad_ang));
 	return (dist);
 }
 
@@ -225,52 +237,118 @@ t_coord		sprite_center(t_coord hit, t_camera *cam)
 
 void	print_sprite(t_mlx_data *mlx, int x, t_coord hit, t_camera *cam)
 {
-	float	t;
+	float	width;
 	t_coord	center;
-	t_coord	sprite_1;
-	float	rad;
+	// t_coord	sprite_1;
+	// float	rad;
 
 	if (hit.x == -1)
 		return ;
-	t = 0.5 * width_deductor(hit, cam);
+	width = width_deductor(hit, cam);
 	center = sprite_center(hit, cam);
-	rad = cam->beta_ang + 90;
-	rad = rad / 180 * M_PI;
-	sprite_1.x = center.x + (cos(rad) * 0.5);
-	sprite_1.y = center.y + (sin(rad) * 0.5);
-	printf("hit x: %f y: %f ", hit.x, hit.y);
-	hit.x = (1 - t) * sprite_1.x + (t * center.x);
-	hit.y = (1 - t) * sprite_1.y + (t * center.y);
-	printf("t: %f, hov : %f\n", t, cam->h_o_v);
+	// rad = cam->beta_ang + 90;
+	// rad = rad / 180 * M_PI;
+	// sprite_1.x = center.x + (cos(rad) * 0.5);
+	// sprite_1.y = center.y + (sin(rad) * 0.5);
+	// printf("hit x: %f y: %f ", hit.x, hit.y);
+	// hit.x = (1 - t) * sprite_1.x + (t * center.x);
+	// hit.y = (1 - t) * sprite_1.y + (t * center.y);
+	// printf("t: %f, hov : %f\n", t, cam->h_o_v);
 	// print_vertical_line(mlx, x, dist_calc(hit, cam), *cam);
-	vertical_sprite_line(dist_calc(hit, cam), t / 0.5, mlx, x);
+	printf("width : %f\n", width);
+	vertical_sprite_line(dist_calc(center, cam), width, mlx, x);
 	
 }
 
-void	frame_render(t_mlx_data *mlx, t_camera *cam, int **world_map)
+int		add_sprite(t_camera *cam, int x, int y)
+{
+	t_coord		*new_sprites;
+	int			i;
+	int			q;
+
+	i = 0;
+	while (cam->sprites != 0 && cam->sprites[i].x != -1)
+	{
+		if (x == cam->sprites[i].x && y == cam->sprites[i].y)
+			return (0);
+		i++;
+	}
+	if ((new_sprites = malloc((i + 2) * sizeof(*new_sprites))) == 0)
+		return (-1);
+	q = 0;
+	while (q < i)
+	{
+		new_sprites[q] = cam->sprites[q];
+		q++;
+	}
+	new_sprites[q].x = x;
+	new_sprites[q].y = y;
+	new_sprites[q + 1].x = -1;
+	free(cam->sprites);
+	cam->sprites = new_sprites;
+	return (0);
+}
+
+float	*dist_buffer(t_settings *set)
+{
+	float	*buffer;
+
+	buffer = malloc((set->s_width + 1) * sizeof(float));
+	buffer[set->s_width] = -1;
+	return (buffer);
+}
+
+void	print_sprites(t_mlx_data *mlx, t_camera *cam)
+{
+	int i;
+
+	i = 0;
+	(void)mlx;
+	while (cam->sprites != 0 && cam->sprites[i].x != -1)
+	{
+		ft_printf("Sprite num %d : x = %d, y = %d\n", i + 1, (int)cam->sprites[i].x, (int)cam->sprites[i].y);
+		i++;
+	}
+}
+
+int		ray_looper(t_mlx_data *mlx, t_camera *cam, float plan_size, int **world_map)
 {
 	int		column;
-	float	quadrant_theta;
+	float	quad_theta;
 	float	cam_plan;
-	float	plan_size;
 
 	column = 0;
-	plan_size = tan((FOV / 2) * M_PI / 180.0);
 	cam_plan = plan_size;
-	mlx->img = mlx_new_image(mlx->mlx, mlx->set->s_width, mlx->set->s_height);
-	mlx->addr = mlx_get_data_addr(mlx->img, &mlx->bits_per_pixel,
-								&mlx->line_length, &mlx->endian);
 	while (column < mlx->set->s_width)
 	{
 		cam->theta_ang = cam->beta_ang + atan(cam_plan) * 180.0 / M_PI;
-		quadrant_theta = angle_to_quadrant(&cam->theta_ang, cam);
-		print_vertical_line(mlx, column,
-						min_ray_dist(cam, world_map, quadrant_theta), *cam);
-		print_sprite(mlx, column, ray_sprite(cam, world_map, quadrant_theta), cam);
+		quad_theta = angle_to_quadrant(&cam->theta_ang, cam);
+		cam->dists[column] = min_ray_dist(cam, world_map, quad_theta);
+		if (cam->dists[column] == -2)
+			return (-1);
+		print_vertical_line(mlx, column, cam->dists[column], *cam);						
 		cam_plan = cam_plan - ((plan_size / (mlx->set->s_width - 1)) * 2);
 		column++;
 	}
+	return (0);
+}
+
+int		frame_render(t_mlx_data *mlx, t_camera *cam, int **world_map)
+{
+	float	plan_size;
+
+	plan_size = tan((FOV / 2) * M_PI / 180.0);
+	mlx->img = mlx_new_image(mlx->mlx, mlx->set->s_width, mlx->set->s_height);
+	mlx->addr = mlx_get_data_addr(mlx->img, &mlx->bits_per_pixel,
+								&mlx->line_length, &mlx->endian);
+	if ((cam->dists = dist_buffer(mlx->set)) == 0)
+		return (-1);
+	if (ray_looper(mlx, cam, plan_size, world_map) == -1)
+		return (-1);
+	print_sprites(mlx, cam);
 	mlx_put_image_to_window(mlx->mlx, mlx->win, mlx->img, 0, 0);
+	free_all(mlx, cam);
+	return (0);
 }
 
 void	first_int(t_camera *cam, float rad, t_coord *x_inter, t_coord *y_inter)
@@ -301,7 +379,7 @@ void	first_int(t_camera *cam, float rad, t_coord *x_inter, t_coord *y_inter)
 	}
 }
 
-void	hit_hor(t_camera *cam, float rad, int **world_map)
+int		hit_hor(t_camera *cam, float rad, int **world_map)
 {
 	int		y_check;
 
@@ -317,12 +395,18 @@ void	hit_hor(t_camera *cam, float rad, int **world_map)
 		if (world_map[(int)cam->y_intercept.y + y_check]
 			[(int)cam->y_intercept.x] == 1)
 			break ;
+		if (world_map[(int)cam->y_intercept.y + y_check]
+			[(int)cam->y_intercept.x] == 2)
+			if ((add_sprite(cam, (int)cam->y_intercept.x,
+						(int)cam->y_intercept.y + y_check)) == -1)
+				return (-2);
 		cam->y_intercept.x += 1 / tan(rad) * cam->tile_step_x;
 		cam->y_intercept.y += cam->tile_step_y;
 	}
+	return (0);
 }
 
-void	hit_wall(t_camera *cam, float rad, int **world_map)
+int		hit_wall(t_camera *cam, float rad, int **world_map)
 {
 	int		x_check;
 
@@ -338,10 +422,17 @@ void	hit_wall(t_camera *cam, float rad, int **world_map)
 		if (world_map[(int)cam->x_intercept.y]
 			[(int)cam->x_intercept.x + x_check] == 1)
 			break ;
+		if (world_map[(int)cam->x_intercept.y]
+			[(int)cam->x_intercept.x + x_check] == 2)
+			if (add_sprite(cam, (int)cam->x_intercept.x + x_check,
+				(int)cam->x_intercept.y) == -1)
+				return (-2);
 		cam->x_intercept.x += cam->tile_step_x;
 		cam->x_intercept.y += tan(rad) * cam->tile_step_y;
 	}
-	hit_hor(cam, rad, world_map);
+	if (hit_hor(cam, rad, world_map) == -2)
+		return (-2);
+	return (0);
 }
 
 float	min_ray_dist(t_camera *cam, int **world_map, float angle)
@@ -352,7 +443,8 @@ float	min_ray_dist(t_camera *cam, int **world_map, float angle)
 
 	rad_angle = angle * M_PI / 180.0;
 	first_int(cam, rad_angle, &cam->x_intercept, &cam->y_intercept);
-	hit_wall(cam, rad_angle, world_map);
+	if (hit_wall(cam, rad_angle, world_map) == -2)
+		return (-2);
 	ver_dist = sqrt(pow(cam->x_intercept.x -
 			(cam->player_x + cam->player_dx), 2) +
 			pow(cam->x_intercept.y - (cam->player_y + cam->player_dy), 2));
@@ -365,10 +457,7 @@ float	min_ray_dist(t_camera *cam, int **world_map, float angle)
 		return (hor_dist * cos(fabs(quadrant_to_angle(&angle, cam) -
 				cam->beta_ang) * M_PI / 180));
 	}
-	else
-	{
-		cam->h_o_v = 2;
-		return (ver_dist * cos(fabs(quadrant_to_angle(&angle, cam) -
-				cam->beta_ang) * M_PI / 180));
-	}
+	cam->h_o_v = 2;
+	return (ver_dist * cos(fabs(quadrant_to_angle(&angle, cam) -
+			cam->beta_ang) * M_PI / 180));
 }
