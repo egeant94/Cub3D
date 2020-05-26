@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/27 22:45:24 by user42            #+#    #+#             */
-/*   Updated: 2020/05/25 15:39:51 by user42           ###   ########.fr       */
+/*   Updated: 2020/05/26 16:12:34 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -216,49 +216,36 @@ float	dist_calc(t_coord hit, t_camera *cam)
 	return (dist);
 }
 
-t_coord		sprite_center(t_coord hit, t_camera *cam)
+float	rad_ang_calc(t_coord hit, t_camera *cam, float dist)
+{
+	float	rad_ang;
+	float	rad_beta;
+
+	rad_beta = cam->beta_ang / 180 * M_PI;
+	dist = sqrt(pow(hit.x - (cam->player_x + cam->player_dx), 2) +
+			pow(hit.y - (cam->player_y + cam->player_dy), 2));
+	rad_ang = acos(fabs((cam->player_x + cam->player_dx) - hit.x) / dist);
+	if (cam->player_x + cam->player_dx > hit.x
+		&& cam->player_y + cam->player_dy > hit.y) 
+		rad_ang = M_PI - (rad_ang + rad_beta);
+	else if (cam->player_y + cam->player_dy < hit.y)
+		rad_ang = M_PI - rad_beta + rad_ang;
+	else if (cam->player_x + cam->player_dx < hit.x
+			&& cam->player_y + cam->player_dy < hit.y)
+		rad_ang = 2 * M_PI - (rad_beta + rad_ang);
+	else
+		rad_ang = rad_beta - rad_ang;
+	return (rad_ang);
+}
+
+t_coord		sprite_center(t_coord hit)
 {
 	t_coord center;
-	int		x_check;
-	int		y_check;
 
-	if (cam->tile_step_x == -1 && cam->h_o_v == 2)
-		x_check = -1;
-	else
-		x_check = 0;
-	if (cam->tile_step_y == -1 && cam->h_o_v == 1)
-		y_check = -1;
-	else
-		y_check = 0;
-	center.x = hit.x - (hit.x - (int)hit.x) + 0.5 + x_check;
-	center.y = hit.y - (hit.y - (int)hit.y) + 0.5 + y_check;
+	center.x = hit.x + 0.5;
+	center.y = hit.y + 0.5;
 	return (center);
 }	
-
-void	print_sprite(t_mlx_data *mlx, int x, t_coord hit, t_camera *cam)
-{
-	float	width;
-	t_coord	center;
-	// t_coord	sprite_1;
-	// float	rad;
-
-	if (hit.x == -1)
-		return ;
-	width = width_deductor(hit, cam);
-	center = sprite_center(hit, cam);
-	// rad = cam->beta_ang + 90;
-	// rad = rad / 180 * M_PI;
-	// sprite_1.x = center.x + (cos(rad) * 0.5);
-	// sprite_1.y = center.y + (sin(rad) * 0.5);
-	// printf("hit x: %f y: %f ", hit.x, hit.y);
-	// hit.x = (1 - t) * sprite_1.x + (t * center.x);
-	// hit.y = (1 - t) * sprite_1.y + (t * center.y);
-	// printf("t: %f, hov : %f\n", t, cam->h_o_v);
-	// print_vertical_line(mlx, x, dist_calc(hit, cam), *cam);
-	printf("width : %f\n", width);
-	vertical_sprite_line(dist_calc(center, cam), width, mlx, x);
-	
-}
 
 int		add_sprite(t_camera *cam, int x, int y)
 {
@@ -298,17 +285,97 @@ float	*dist_buffer(t_settings *set)
 	return (buffer);
 }
 
-void	print_sprites(t_mlx_data *mlx, t_camera *cam)
+void	sprite_sorter(float *sprite_dists, t_camera *cam)
+{
+	float	temp;
+	t_coord	temp_coord;
+	int		i;
+
+	i = 0;
+	while (sprite_dists != 0 && sprite_dists[i] != -1)
+		i++;
+	if (i <= 1)
+		return ;
+	i = 1;
+	while (sprite_dists[i] != -1)
+	{
+		if (sprite_dists[i] > sprite_dists[i - 1])
+		{
+			temp = sprite_dists[i];
+			temp_coord = cam->sprites[i];
+			sprite_dists[i] = sprite_dists[i - 1];
+			cam->sprites[i] = cam->sprites[i - 1];
+			cam->sprites[i - 1] = temp_coord;
+			sprite_dists[i - 1] = temp;
+			i = 1;
+		}
+		i++;
+	}
+}
+
+void	print_sprite(t_mlx_data *mlx, float dist, int x, t_texture *tex)
+{
+	float		y;
+	float		wall_offset;
+	float		tex_y;
+
+	wall_offset = wall_offseter(dist, tex, &tex_y, mlx);
+	y = init_y(wall_offset);
+	while (y < mlx->set->s_height && y < mlx->set->s_height - wall_offset)
+	{
+		tex_y += inc_tex_y(wall_offset, tex, mlx, dist);
+		if (x > 0 && x < mlx->set->s_width - 1)
+			my_mlx_pixel_put(mlx, x, y, 0x00ff0000);
+		y++;
+	}
+}
+
+void	print_sprites(t_mlx_data *mlx, t_camera *cam, t_texture *tex)
+{
+	int		i;
+	int		pixel;
+	float	rad_ang;
+	float	test;
+
+	i = 0;
+	while (cam->sprite_dists[i] != -1)
+	{
+		rad_ang = cam->beta_ang;
+		rad_ang = angle_to_quadrant(&rad_ang, cam);
+		rad_ang = rad_ang_calc(
+					sprite_center(cam->sprites[i]), cam, cam->sprite_dists[i]);
+		pixel = 2;
+		// if (cam->tile_step_x == -1)
+		// 	test = 1 - (tan(rad_ang) + cam->plan_size) / (cam->plan_size * 2);
+		// else
+		test = (tan(rad_ang) + cam->plan_size) / (cam->plan_size * 2);
+		pixel = test * mlx->set->s_width;
+		printf("sprite %d = x : %f, y : %f, dist : %f, ang : %f, tan : %f\n", i, cam->sprites[i].x, cam->sprites[i].y, cam->sprite_dists[i], rad_ang * 180 / M_PI, test);
+		print_sprite(mlx, cam->sprite_dists[i], pixel, tex);
+		i++;
+	}
+}
+
+int		display_sprites(t_mlx_data *mlx, t_camera *cam)
 {
 	int i;
 
 	i = 0;
 	(void)mlx;
 	while (cam->sprites != 0 && cam->sprites[i].x != -1)
+		i++;
+	if ((cam->sprite_dists = malloc((i + 1) * sizeof(float))) == 0)
+		return (-1);
+	cam->sprite_dists[i] = -1;
+	i = 0;
+	while (cam->sprites != 0 && cam->sprites[i].x != -1)
 	{
-		ft_printf("Sprite num %d : x = %d, y = %d\n", i + 1, (int)cam->sprites[i].x, (int)cam->sprites[i].y);
+		cam->sprite_dists[i] = dist_calc(sprite_center(cam->sprites[i]), cam);
 		i++;
 	}
+	sprite_sorter(cam->sprite_dists, cam);
+	print_sprites(mlx, cam, &mlx->set->sprite);
+	return (0);
 }
 
 int		ray_looper(t_mlx_data *mlx, t_camera *cam, float plan_size, int **world_map)
@@ -335,17 +402,16 @@ int		ray_looper(t_mlx_data *mlx, t_camera *cam, float plan_size, int **world_map
 
 int		frame_render(t_mlx_data *mlx, t_camera *cam, int **world_map)
 {
-	float	plan_size;
-
-	plan_size = tan((FOV / 2) * M_PI / 180.0);
+	cam->plan_size = tan((FOV / 2) * M_PI / 180.0);
 	mlx->img = mlx_new_image(mlx->mlx, mlx->set->s_width, mlx->set->s_height);
 	mlx->addr = mlx_get_data_addr(mlx->img, &mlx->bits_per_pixel,
 								&mlx->line_length, &mlx->endian);
 	if ((cam->dists = dist_buffer(mlx->set)) == 0)
 		return (-1);
-	if (ray_looper(mlx, cam, plan_size, world_map) == -1)
+	if (ray_looper(mlx, cam, cam->plan_size, world_map) == -1)
 		return (-1);
-	print_sprites(mlx, cam);
+	if (display_sprites(mlx, cam) == -1)
+		return (-1);
 	mlx_put_image_to_window(mlx->mlx, mlx->win, mlx->img, 0, 0);
 	free_all(mlx, cam);
 	return (0);

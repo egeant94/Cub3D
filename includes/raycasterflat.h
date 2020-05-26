@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/17 09:21:38 by osboxes           #+#    #+#             */
-/*   Updated: 2020/05/25 15:15:11 by user42           ###   ########.fr       */
+/*   Updated: 2020/05/26 12:12:50 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,8 +45,10 @@ typedef struct	s_camera
 	float	y_step;
 	int		tile_step_x;
 	int		tile_step_y;
+	float	plan_size;
 	float	*dists;
 	t_coord	*sprites;
+	float	*sprite_dists;
 }				t_camera;
 
 typedef struct	s_movements

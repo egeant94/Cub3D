@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/01 11:15:10 by user42            #+#    #+#             */
-/*   Updated: 2020/05/25 15:16:53 by user42           ###   ########.fr       */
+/*   Updated: 2020/05/26 11:34:37 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,11 @@ void	free_all(t_mlx_data *mlx, t_camera *cam)
 	{
 		free(cam->sprites);
 		cam->sprites = 0;
+	}
+	if (cam->sprite_dists != 0)
+	{
+		free(cam->sprite_dists);
+		cam->sprite_dists = 0;
 	}
 }
 
