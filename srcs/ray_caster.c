@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/27 22:45:24 by user42            #+#    #+#             */
-/*   Updated: 2020/05/27 12:42:38 by user42           ###   ########.fr       */
+/*   Updated: 2020/05/27 16:30:13 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,7 +180,6 @@ void	vertical_sprite_line(float dist, float width, t_mlx_data *mlx, int x)
 	t_texture	*tex;
 
 	tex = &mlx->set->sprite;
-	// width = 0;
 	wall_offset = wall_offseter(dist, tex, &tex_y, mlx);
 	y = init_y(wall_offset);
 	while (y < mlx->set->s_height && y < mlx->set->s_height - wall_offset)
@@ -313,20 +312,34 @@ void	sprite_sorter(float *sprite_dists, t_camera *cam)
 	}
 }
 
+
 void	print_sprite(t_mlx_data *mlx, float dist, int x, t_texture *tex)
 {
-	float		y;
-	float		wall_offset;
-	float		tex_y;
+	float		width;
+	int			hor;
 
-	wall_offset = wall_offseter(dist, tex, &tex_y, mlx);
-	y = init_y(wall_offset);
-	while (y < mlx->set->s_height && y < mlx->set->s_height - wall_offset)
+	(void)tex;
+	width = (float)mlx->set->wall_height / dist;
+	width = ((1 - width) / 2);
+
+	// float	wall;
+	// float	wall_offset;
+
+	// wall = (float)mlx->set->wall_height / dist;
+	// wall_offset = ((1 - wall) / 2) * mlx->set->s_height;
+	// *tex_y = 0;
+	// if (wall_offset < 0)
+	// 	*tex_y = (1 - (1 / wall)) / 2 * tex->height;
+	// return (wall_offset);
+
+	// printf("widht : %f\n", width);
+	hor = x - (width * mlx->set->s_width / 2);
+	while ((hor > 0 && hor < mlx->set->s_width)
+			&& hor < x + (width * mlx->set->s_width / 2))
 	{
-		tex_y += inc_tex_y(wall_offset, tex, mlx, dist);
-		if (x > 0 && x < mlx->set->s_width - 1)
-			my_mlx_pixel_put(mlx, x, y, 0x00ff0000);
-		y++;
+		if (dist < mlx->cam->dists[hor])
+			vertical_sprite_line(dist,  (hor - x + (width * mlx->set->s_width / 2))/ (width * mlx->set->s_width), mlx, hor);
+		hor++;
 	}
 }
 
