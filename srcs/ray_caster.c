@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/27 22:45:24 by user42            #+#    #+#             */
-/*   Updated: 2020/05/26 16:12:34 by user42           ###   ########.fr       */
+/*   Updated: 2020/05/27 12:42:38 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -205,7 +205,8 @@ float	dist_calc(t_coord hit, t_camera *cam)
 	if (cam->player_x + cam->player_dx > hit.x
 		&& cam->player_y + cam->player_dy > hit.y) 
 		rad_ang = M_PI - (rad_ang + rad_beta);
-	else if (cam->player_y + cam->player_dy < hit.y)
+	else if (cam->player_x + cam->player_dx > hit.x
+		&& cam->player_y + cam->player_dy < hit.y)
 		rad_ang = M_PI - rad_beta + rad_ang;
 	else if (cam->player_x + cam->player_dx < hit.x
 			&& cam->player_y + cam->player_dy < hit.y)
@@ -219,23 +220,22 @@ float	dist_calc(t_coord hit, t_camera *cam)
 float	rad_ang_calc(t_coord hit, t_camera *cam, float dist)
 {
 	float	rad_ang;
-	float	rad_beta;
 
-	rad_beta = cam->beta_ang / 180 * M_PI;
 	dist = sqrt(pow(hit.x - (cam->player_x + cam->player_dx), 2) +
 			pow(hit.y - (cam->player_y + cam->player_dy), 2));
 	rad_ang = acos(fabs((cam->player_x + cam->player_dx) - hit.x) / dist);
 	if (cam->player_x + cam->player_dx > hit.x
 		&& cam->player_y + cam->player_dy > hit.y) 
-		rad_ang = M_PI - (rad_ang + rad_beta);
-	else if (cam->player_y + cam->player_dy < hit.y)
-		rad_ang = M_PI - rad_beta + rad_ang;
+		rad_ang = M_PI - rad_ang;
+	else if (cam->player_x + cam->player_dx > hit.x
+		&& cam->player_y + cam->player_dy < hit.y)
+		rad_ang = rad_ang + M_PI;
 	else if (cam->player_x + cam->player_dx < hit.x
 			&& cam->player_y + cam->player_dy < hit.y)
-		rad_ang = 2 * M_PI - (rad_beta + rad_ang);
-	else
-		rad_ang = rad_beta - rad_ang;
-	return (rad_ang);
+		rad_ang = 2 * M_PI - rad_ang;
+	rad_ang = rad_ang * 180 / M_PI;
+	rad_ang = cam->beta_ang - rad_ang;
+	return (rad_ang / 180 * M_PI);
 }
 
 t_coord		sprite_center(t_coord hit)
@@ -350,7 +350,7 @@ void	print_sprites(t_mlx_data *mlx, t_camera *cam, t_texture *tex)
 		// else
 		test = (tan(rad_ang) + cam->plan_size) / (cam->plan_size * 2);
 		pixel = test * mlx->set->s_width;
-		printf("sprite %d = x : %f, y : %f, dist : %f, ang : %f, tan : %f\n", i, cam->sprites[i].x, cam->sprites[i].y, cam->sprite_dists[i], rad_ang * 180 / M_PI, test);
+		// printf("sprite %d = x : %f, y : %f, dist : %f, ang : %f, tan : %f\n", i, cam->sprites[i].x, cam->sprites[i].y, cam->sprite_dists[i], rad_ang * 180 / M_PI, test);
 		print_sprite(mlx, cam->sprite_dists[i], pixel, tex);
 		i++;
 	}
