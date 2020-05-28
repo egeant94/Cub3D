@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/27 22:45:24 by user42            #+#    #+#             */
-/*   Updated: 2020/05/27 16:30:13 by user42           ###   ########.fr       */
+/*   Updated: 2020/05/28 10:59:17 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -172,25 +172,6 @@ float	width_deductor(t_coord hit, t_camera *cam)
 	return (check_right_angle(hit, cam, width));
 }
 
-void	vertical_sprite_line(float dist, float width, t_mlx_data *mlx, int x)
-{
-	float		y;
-	float		wall_offset;
-	float		tex_y;
-	t_texture	*tex;
-
-	tex = &mlx->set->sprite;
-	wall_offset = wall_offseter(dist, tex, &tex_y, mlx);
-	y = init_y(wall_offset);
-	while (y < mlx->set->s_height && y < mlx->set->s_height - wall_offset)
-	{
-		tex_y += inc_tex_y(wall_offset, tex, mlx, dist);
-		my_mlx_pixel_put(mlx, x, y,
-			my_mlx_pixel_reverse(tex, width * tex->width, (int)tex_y));
-		y++;
-	}
-}
-
 float	dist_calc(t_coord hit, t_camera *cam)
 {
 	float	dist;
@@ -312,6 +293,25 @@ void	sprite_sorter(float *sprite_dists, t_camera *cam)
 	}
 }
 
+void	vertical_sprite_line(float dist, float width, t_mlx_data *mlx, int x)
+{
+	float		y;
+	float		wall_offset;
+	float		tex_y;
+	int			color;
+
+	wall_offset = wall_offseter(dist, &mlx->set->sprite, &tex_y, mlx);
+	y = init_y(wall_offset);
+	while (y < mlx->set->s_height && y < mlx->set->s_height - wall_offset)
+	{
+		tex_y += inc_tex_y(wall_offset, &mlx->set->sprite, mlx, dist);
+		color = my_mlx_pixel_reverse(&mlx->set->sprite, width * mlx->set->sprite.width, (int)tex_y);
+		// printf("%d\n", get_t(color));
+		if (get_t(color) != 0)
+			my_mlx_pixel_put(mlx, x, y, color);
+		y++;
+	}
+}
 
 void	print_sprite(t_mlx_data *mlx, float dist, int x, t_texture *tex)
 {
@@ -319,25 +319,13 @@ void	print_sprite(t_mlx_data *mlx, float dist, int x, t_texture *tex)
 	int			hor;
 
 	(void)tex;
-	width = (float)mlx->set->wall_height / dist;
-	width = ((1 - width) / 2);
-
-	// float	wall;
-	// float	wall_offset;
-
-	// wall = (float)mlx->set->wall_height / dist;
-	// wall_offset = ((1 - wall) / 2) * mlx->set->s_height;
-	// *tex_y = 0;
-	// if (wall_offset < 0)
-	// 	*tex_y = (1 - (1 / wall)) / 2 * tex->height;
-	// return (wall_offset);
-
-	// printf("widht : %f\n", width);
+	width = (float)mlx->set->s_width / (dist * mlx->set->s_width *2.87);
 	hor = x - (width * mlx->set->s_width / 2);
-	while ((hor > 0 && hor < mlx->set->s_width)
-			&& hor < x + (width * mlx->set->s_width / 2))
+	while (1)
 	{
-		if (dist < mlx->cam->dists[hor])
+		if (hor >= x + (width * mlx->set->s_width / 2))
+			return ;
+		if (hor > 0 && hor < mlx->set->s_width && dist < mlx->cam->dists[hor])
 			vertical_sprite_line(dist,  (hor - x + (width * mlx->set->s_width / 2))/ (width * mlx->set->s_width), mlx, hor);
 		hor++;
 	}

@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/17 09:21:38 by osboxes           #+#    #+#             */
-/*   Updated: 2020/05/26 12:12:50 by user42           ###   ########.fr       */
+/*   Updated: 2020/05/28 10:44:12 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,4 +135,9 @@ float			inc_tex_y(float w_o, t_texture *tex,
 t_coord			ray_sprite(t_camera *cam, int **world_map, float angle);
 void			free_all(t_mlx_data *mlx, t_camera *cam);
 float			*dist_buffer(t_settings *set);
+int				create_trgb(int t, int r, int g, int b);
+int				get_t(int trgb);
+int				get_r(int trgb);
+int				get_g(int trgb);
+int				get_b(int trgb);
 #endif

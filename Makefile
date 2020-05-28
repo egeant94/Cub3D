@@ -6,7 +6,7 @@
 #    By: user42 <user42@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/12 15:21:23 by egeant            #+#    #+#              #
-#    Updated: 2020/05/07 17:18:10 by user42           ###   ########.fr        #
+#    Updated: 2020/05/28 10:41:01 by user42           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ SDIR	= srcs/
 # SDIR	= tests/
 ODIR	= obj/
 HEADERS	= includes
-SOURCES	= angles.c display.c display_utils.c main.c movements.c ray_caster.c settings.c key_hooks.c
+SOURCES	= angles.c display.c display_utils.c main.c movements.c ray_caster.c settings.c key_hooks.c colors.c
 # SOURCES	= test.c
 SRCS	= $(addprefix $(SDIR),$(SOURCES))
 OBJS	= $(addprefix $(ODIR),$(SOURCES:.c=.o))
