@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/17 09:18:23 by osboxes           #+#    #+#             */
-/*   Updated: 2020/06/01 11:27:10 by user42           ###   ########.fr       */
+/*   Updated: 2020/06/01 14:25:36 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,10 +58,14 @@ int		main(int argc, char **argv)
 		return (0);
 	init_camera(&cam);
 	init_movements(&move);
-	if (init_settings(&set, &mlx, argc, argv))
-		return (0);
 	mlx.cam = &cam;
 	mlx.move = &move;
+	mlx.mlx = 0;
+	if (init_settings(&set, &mlx, argc, argv))
+	{
+		quit(&mlx);
+		return (0);
+	}
 	mlx.set = &set;
 	mlx_hook(mlx.win, 17, 1L << 17, quit, &mlx);
 	mlx_hook(mlx.win, 2, 1L << 0, key_press, &mlx);

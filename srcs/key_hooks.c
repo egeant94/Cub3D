@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/01 11:15:10 by user42            #+#    #+#             */
-/*   Updated: 2020/05/26 11:34:37 by user42           ###   ########.fr       */
+/*   Updated: 2020/06/01 14:26:10 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 
 void	free_all(t_mlx_data *mlx, t_camera *cam)
 {
-	if (mlx->img != 0)
+	if (mlx->img != 0 && mlx->mlx != 0)
 	{
 		mlx_destroy_image(mlx->mlx, mlx->img);
 		mlx->img = 0;
@@ -102,7 +102,9 @@ int		renderer(t_mlx_data *mlx)
 int		quit(t_mlx_data *mlx)
 {
 	free_all(mlx, mlx->cam);
-	mlx_destroy_window(mlx->mlx, mlx->win);
+	close(mlx->cub_fd);
+	if (mlx->mlx != 0 && mlx->win != 0)
+		mlx_destroy_window(mlx->mlx, mlx->win);
 	exit(0);
 	return (1);
 }

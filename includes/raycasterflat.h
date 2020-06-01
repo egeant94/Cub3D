@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/17 09:21:38 by osboxes           #+#    #+#             */
-/*   Updated: 2020/06/01 12:19:38 by user42           ###   ########.fr       */
+/*   Updated: 2020/06/01 14:12:42 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 # include <string.h>
 # include <unistd.h>
 # include <fcntl.h>
+# include <errno.h>
 
 typedef struct	s_coordinates
 {
@@ -98,6 +99,7 @@ typedef struct	s_mlx_data
 	int			line_length;
 	int			endian;
 	int			**world_map;
+	int			cub_fd;
 	t_camera	*cam;
 	t_movements	*move;
 	t_settings	*set;
