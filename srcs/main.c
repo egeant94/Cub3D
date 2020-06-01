@@ -6,80 +6,63 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/17 09:18:23 by osboxes           #+#    #+#             */
-/*   Updated: 2020/05/28 10:33:18 by user42           ###   ########.fr       */
+/*   Updated: 2020/06/01 11:27:10 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/raycasterflat.h"
 
-int		**create_map(void)
+int		check_second_arg(int argc, char **argv)
 {
-	int			**map;
-	int			i;
-	int			y;
-
-	map = malloc(sizeof(int *) * 6);
-	i = 0;
-	while (i < 6)
+	if (argc == 3)
 	{
-		map[i] = malloc(sizeof(int) * 6);
-		i++;
-	}
-	i = 0;
-	while (i < 6)
-	{
-		y = 0;
-		while (y < 6)
+		if (ft_strncmp(argv[2], "--save", 7) != 0)
 		{
-			map[i][y] = 0;
-			y++;
+			write(1, "Error\nSecond argument isn't valid\n", 35);
+			return (1);
 		}
-		i++;
 	}
-	i = 0;
-	while (i < 6)
-	{
-		map[0][i] = 1;
-		map[5][i] = 1;
-		map[i][0] = 1;
-		map[i][5] = 1;
-		i++;
-	}
-	map[1][2] = 1;
-	map[2][3] = 2;
-	map[2][2] = 2;
-	map[3][2] = 1;
-	i = 0;
-	y = 0;
-	while (i < 6)
-	{
-		y = 0;
-		while (y < 6)
-		{
-			printf("%d, ", map[i][y]);
-			y++;
-		}
-		printf("\n");
-		i++;
-	}
-	return (map);
+	return (0);
 }
 
-int		main(void)
+int		check_args(int argc, char **argv)
+{
+	int len;
+
+	if (argc <= 1)
+	{
+		write(1, "Error\nPlease add a config file .cub as an argument\n", 52);
+		return (1);
+	}
+	if (argc > 3)
+	{
+		write(1, "Error\nToo many arguments\n", 26);
+		return (1);
+	}
+	if (((len = ft_strlen(argv[1])) < 5) || ft_strncmp(argv[1] + len - 4, ".cub", 4) != 0)
+	{
+		write(1, "Error\nConfig file extension isn't .cub\n", 40);
+		return (1);
+	}
+	return (check_second_arg(argc, argv));
+}
+
+int		main(int argc, char **argv)
 {
 	t_camera	cam;
 	t_mlx_data	mlx;
 	t_movements	move;
 	t_settings	set;
 
-	mlx.world_map = create_map();
+	if (check_args(argc, argv))
+		return (0);
 	init_camera(&cam);
 	init_movements(&move);
-	init_settings(&set, &mlx);
+	if (init_settings(&set, &mlx, argc, argv))
+		return (0);
 	mlx.cam = &cam;
 	mlx.move = &move;
 	mlx.set = &set;
-	// frame_render(&mlx, &cam, mlx.world_map);
 	mlx_hook(mlx.win, 17, 1L << 17, quit, &mlx);
 	mlx_hook(mlx.win, 2, 1L << 0, key_press, &mlx);
 	mlx_hook(mlx.win, 3, 1L << 1, key_release, &mlx);
