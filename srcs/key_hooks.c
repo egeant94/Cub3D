@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/01 11:15:10 by user42            #+#    #+#             */
-/*   Updated: 2020/06/01 14:26:10 by user42           ###   ########.fr       */
+/*   Updated: 2020/06/02 15:44:37 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@ void	free_all(t_mlx_data *mlx, t_camera *cam)
 		free(cam->sprite_dists);
 		cam->sprite_dists = 0;
 	}
+	free_line(&mlx->line);
+	split_free(mlx);
 }
 
 int		key_press(int keycode, t_mlx_data *mlx)

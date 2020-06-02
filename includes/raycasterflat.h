@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/17 09:21:38 by osboxes           #+#    #+#             */
-/*   Updated: 2020/06/01 14:12:42 by user42           ###   ########.fr       */
+/*   Updated: 2020/06/02 15:21:16 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,8 @@ typedef struct	s_mlx_data
 	int			endian;
 	int			**world_map;
 	int			cub_fd;
+	char		*line;
+	char		**split;
 	t_camera	*cam;
 	t_movements	*move;
 	t_settings	*set;
@@ -145,4 +147,7 @@ int				get_t(int trgb);
 int				get_r(int trgb);
 int				get_g(int trgb);
 int				get_b(int trgb);
+void			init_mlx(t_mlx_data *mlx);
+void			free_line(char **str);
+void			split_free(t_mlx_data *mlx);
 #endif

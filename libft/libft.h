@@ -3,16 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: egeant <egeant@student.42.fr>              +#+  +:+       +#+        */
+/*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/20 09:42:52 by egeant            #+#    #+#             */
-/*   Updated: 2019/10/14 12:12:08 by egeant           ###   ########.fr       */
+/*   Updated: 2020/06/02 11:06:18 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef LIBFT_H
 
 # define LIBFT_H
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 32
+# endif
 # include <unistd.h>
 # include <stdlib.h>
 
@@ -50,5 +53,10 @@ void	ft_putchar_fd(char c, int fd);
 void	ft_putstr_fd(char *s, int fd);
 void	ft_putendl_fd(char *s, int fd);
 void	ft_putnbr_fd(int n, int fd);
+int		get_next_line(int fd, char **line);
+size_t	ft_strlen(const char *str);
+char	*ft_strdup(char const *str);
+char	*ft_strchr(char const *str, int c);
+char	*ft_strjoinfree(char *s1, char const *s2);
 
 #endif

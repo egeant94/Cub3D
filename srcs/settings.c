@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/01 11:20:36 by user42            #+#    #+#             */
-/*   Updated: 2020/06/01 14:25:47 by user42           ###   ########.fr       */
+/*   Updated: 2020/06/02 15:51:53 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,16 +89,111 @@ int			print_error(char *str)
 	return (1);
 }
 
+void		free_line(char **str)
+{
+	if (*str != 0)
+	{
+		free(*str);
+		*str = 0;
+	}
+}
+
+void		split_free(t_mlx_data *mlx)
+{
+	int	i;
+
+	i = 0;
+	if (mlx->split != 0)
+	{
+		while(mlx->split[i] != 0)
+		{
+			free(mlx->split[i]);
+			i++;
+		}
+		free(mlx->split);
+		mlx->split = 0;
+	}
+}
+
+int			split_len(char **tab)
+{
+	int	i;
+
+	i = 0;
+	while(tab[i] != 0)
+		i++;
+	return (i);
+}
+
+int			line_to_set(t_settings *set, char *line, t_mlx_data *mlx)
+{
+	if ((mlx->split = ft_split(line, ' ')) == 0)
+		return (print_error("Malloc failed while parsing .cub"));
+	if (ft_strlen(line) > 0)
+	{
+		if (line[0] == 'R')
+		{
+			if (split_len(mlx->split) < 3)
+				return (print_error("Resolution lacks a parameter."));
+			set->s_width = ft_atoi(mlx->split[1]);
+			set->s_height = ft_atoi(mlx->split[2]);
+			if (set->s_width <= 1 || set->s_height <= 0)
+				return (print_error("Resolution is too small."));
+		}
+	}
+	split_free(mlx);
+	return (0);
+}
+
+int			file_reading(t_settings *set, t_mlx_data *mlx)
+{
+	int ret;
+
+	ret = get_next_line(mlx->cub_fd, &mlx->line);
+	while (ret != 0)
+	{
+		if (ret == -1)
+			return (print_error("Malloc failed while parsing .cub"));
+		if (ft_isdigit(mlx->line[0]) || mlx->line[0] == ' ' || mlx->line[0] == '\t')
+			break;
+		if (line_to_set(set, mlx->line, mlx))
+			return (1);
+		ft_printf("%s\n", mlx->line);
+		free_line(&mlx->line);
+		ret = get_next_line(mlx->cub_fd, &mlx->line);
+	}
+	ft_printf("%d, %d\n", set->s_width, set->s_height);
+	free_line(&mlx->line);
+	(void)set;
+	return (0);
+}
+
 int			parse_cub(t_settings *set, t_mlx_data *mlx, int argc, char **argv)
 {
 	if ((mlx->cub_fd = open(argv[1], O_RDONLY)) == -1)
 		return (print_error(strerror(errno)));
-	if (set && 0)
-		(void)mlx;
-	(void)argc;
-	// close(mlx->cub_fd);
-	// mlx->cub_fd = 0;
+	if (file_reading(set, mlx))
+		return (1);
+	if (argc > 2)
+	{
+		ft_printf("Saving first image\n");
+		return (1);
+	}
 	return (0);
+}
+
+void		init_mlx(t_mlx_data *mlx)
+{
+	mlx->mlx = 0;
+	mlx->win = 0;
+	mlx->img = 0;
+	mlx->bits_per_pixel = 0;
+	mlx->line_length = 0;
+	mlx->endian = 0;
+	mlx->world_map = 0;
+	mlx->cub_fd = 0;
+	mlx->line = 0;
+	mlx->split = 0;
 }
 
 int			init_settings(t_settings *set, t_mlx_data *mlx, int argc,
@@ -106,8 +201,6 @@ int			init_settings(t_settings *set, t_mlx_data *mlx, int argc,
 {
 	if (parse_cub(set, mlx, argc, argv))
 		return (1);
-	set->s_width = 1280;
-	set->s_height = 720;
 	set->wall_height = (float)set->s_width / (float)set->s_height / 3.0;
 	set->floor_c = 0xBBEFDECD;
 	set->ceiling_c = 0x0000CCFF;

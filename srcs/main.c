@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/17 09:18:23 by osboxes           #+#    #+#             */
-/*   Updated: 2020/06/01 14:25:36 by user42           ###   ########.fr       */
+/*   Updated: 2020/06/02 11:40:03 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,11 +56,11 @@ int		main(int argc, char **argv)
 
 	if (check_args(argc, argv))
 		return (0);
+	init_mlx(&mlx);
 	init_camera(&cam);
 	init_movements(&move);
 	mlx.cam = &cam;
 	mlx.move = &move;
-	mlx.mlx = 0;
 	if (init_settings(&set, &mlx, argc, argv))
 	{
 		quit(&mlx);
