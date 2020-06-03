@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/01 11:20:36 by user42            #+#    #+#             */
-/*   Updated: 2020/06/03 12:40:31 by user42           ###   ########.fr       */
+/*   Updated: 2020/06/03 14:49:15 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -192,16 +192,21 @@ int			set_colours(t_settings *set, char *line, t_mlx_data *mlx)
 	{
 		if (r == -1 || g == -1 || b == -1)
 			return (print_error("Floor colour is badly written."));
-		set->floor_c = create_trgb(255, r, g, b);
+		set->floor_c = create_trgb(b, g, r, 0);
 	}
 	if (line[0] == 'C')
 	{
 		if (r == -1 || g == -1 || b == -1)
 			return (print_error("Ceiling colour is badly written."));
-		set->ceiling_c = create_trgb(255, r, g, b);
+		set->ceiling_c = create_trgb(b, g, r, 0);
 	}
 	return (0);	
 }
+
+// int			get_map(t_settings *set, char *line, t_mlx_data *mlx)
+// {
+
+// }
 
 int			line_to_set(t_settings *set, char *line, t_mlx_data *mlx)
 {
@@ -240,12 +245,11 @@ int			file_reading(t_settings *set, t_mlx_data *mlx)
 			break;
 		if (line_to_set(set, mlx->line, mlx))
 			return (1);
-		// ft_printf("%s\n", mlx->line);
 		free_line(&mlx->line);
 		ret = get_next_line(mlx->cub_fd, &mlx->line);
 	}
-	// ft_printf("%d, %d\n", set->s_width, set->s_height);
 	free_line(&mlx->line);
+
 	(void)set;
 	return (0);
 }
