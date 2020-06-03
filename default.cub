@@ -1,16 +1,14 @@
-R 1920 1080
-
-S  ./texture/sprite.xpm
+S  ./textures/sprite.xpm
 
 NO ./textures/grass.xpm
 SO ./textures/metal.xpm
-
+R  1280 720
 WE ./textures/wood.xpm
 EA ./textures/brick.xpm
 
 
-F  220,100,0
-C  225,30,0
+F  29,8,8
+C  0,0,0
 
 		1111111111111111111111111
 		1000000000110000000000001

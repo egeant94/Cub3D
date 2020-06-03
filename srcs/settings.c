@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/01 11:20:36 by user42            #+#    #+#             */
-/*   Updated: 2020/06/02 15:51:53 by user42           ###   ########.fr       */
+/*   Updated: 2020/06/03 12:40:31 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,6 +125,84 @@ int			split_len(char **tab)
 	return (i);
 }
 
+int			set_textures(t_settings *set, char *line, t_mlx_data *mlx)
+{
+	if (ft_strlen(line) >= 2 && split_len(mlx->split) >= 2)
+	{
+		if (line[0] == 'N' && line[1] == 'O')
+			if (get_texture(&set->north, mlx->split[1], mlx))
+				return (print_error("North texture not found"));	
+		if (line[0] == 'S' && line[1] == 'O')
+			if (get_texture(&set->south, mlx->split[1], mlx))
+				return (print_error("South texture not found"));
+		if (line[0] == 'W' && line[1] == 'E')
+			if (get_texture(&set->west, mlx->split[1], mlx))
+				return (print_error("West texture not found"));
+		if (line[0] == 'E' && line[1] == 'A')
+			if (get_texture(&set->east, mlx->split[1], mlx))
+				return (print_error("East texture not found"));
+	}
+	if (ft_strlen(line) >= 1 && split_len(mlx->split) >= 2)
+		if (line[0] == 'S' && line[1] != 'O')
+			if (get_texture(&set->sprite, mlx->split[1], mlx))
+				return (print_error("Sprite texture not found"));
+	return (0);
+}
+
+void		set_rgb(int *r, int *g, int *b, t_mlx_data *mlx)
+{
+	int i;
+	
+	i = 0;
+	*r = ft_atoi(mlx->split[1]);
+	while (mlx->split[1][i] != 0)
+	{
+		if (mlx->split[1][i] == ',')
+		{
+			*g = ft_atoi(mlx->split[1] + i + 1);
+			i++;
+			break;
+		}
+		i++;
+	}
+	while (mlx->split[1][i] != 0)
+	{
+		if (mlx->split[1][i] == ',')
+		{
+			*b = ft_atoi(mlx->split[1] + i + 1);
+			break;
+		}
+		i++;
+	}
+}
+
+
+int			set_colours(t_settings *set, char *line, t_mlx_data *mlx)
+{
+	int r;
+	int g;
+	int b;
+
+	r = -1;
+	g = -1;
+	b = -1;
+	if (ft_strlen(line) >= 1 && split_len(mlx->split) >= 2)
+		set_rgb(&r, &g, &b, mlx);
+	if (line[0] == 'F')
+	{
+		if (r == -1 || g == -1 || b == -1)
+			return (print_error("Floor colour is badly written."));
+		set->floor_c = create_trgb(255, r, g, b);
+	}
+	if (line[0] == 'C')
+	{
+		if (r == -1 || g == -1 || b == -1)
+			return (print_error("Ceiling colour is badly written."));
+		set->ceiling_c = create_trgb(255, r, g, b);
+	}
+	return (0);	
+}
+
 int			line_to_set(t_settings *set, char *line, t_mlx_data *mlx)
 {
 	if ((mlx->split = ft_split(line, ' ')) == 0)
@@ -140,6 +218,10 @@ int			line_to_set(t_settings *set, char *line, t_mlx_data *mlx)
 			if (set->s_width <= 1 || set->s_height <= 0)
 				return (print_error("Resolution is too small."));
 		}
+		if (set_textures(set, line, mlx))
+			return (1);
+		if (set_colours(set, line, mlx))
+			return (1);
 	}
 	split_free(mlx);
 	return (0);
@@ -158,11 +240,11 @@ int			file_reading(t_settings *set, t_mlx_data *mlx)
 			break;
 		if (line_to_set(set, mlx->line, mlx))
 			return (1);
-		ft_printf("%s\n", mlx->line);
+		// ft_printf("%s\n", mlx->line);
 		free_line(&mlx->line);
 		ret = get_next_line(mlx->cub_fd, &mlx->line);
 	}
-	ft_printf("%d, %d\n", set->s_width, set->s_height);
+	// ft_printf("%d, %d\n", set->s_width, set->s_height);
 	free_line(&mlx->line);
 	(void)set;
 	return (0);
@@ -184,7 +266,7 @@ int			parse_cub(t_settings *set, t_mlx_data *mlx, int argc, char **argv)
 
 void		init_mlx(t_mlx_data *mlx)
 {
-	mlx->mlx = 0;
+	mlx->mlx = mlx_init();
 	mlx->win = 0;
 	mlx->img = 0;
 	mlx->bits_per_pixel = 0;
@@ -202,21 +284,21 @@ int			init_settings(t_settings *set, t_mlx_data *mlx, int argc,
 	if (parse_cub(set, mlx, argc, argv))
 		return (1);
 	set->wall_height = (float)set->s_width / (float)set->s_height / 3.0;
-	set->floor_c = 0xBBEFDECD;
-	set->ceiling_c = 0x0000CCFF;
+	// set->floor_c = 0xBBEFDECD;
+	// set->ceiling_c = 0x0000CCFF;
 	mlx->world_map = create_map();
-	mlx->mlx = mlx_init();
+	// mlx->mlx = mlx_init();
 	mlx->win = mlx_new_window(mlx->mlx, set->s_width,
 							set->s_height, "Cub3D");
-	if (get_texture(&set->north, "./textures/grass.xpm", mlx))
-		return (print_error("North texture not found"));
-	if (get_texture(&set->south, "./textures/brick.xpm", mlx))
-		return (print_error("South texture not found"));
-	if (get_texture(&set->east, "./textures/wood.xpm", mlx))
-		return (print_error("East texture not found"));
-	if (get_texture(&set->west, "./textures/metal.xpm", mlx))
-		return (print_error("West texture not found"));
-	if (get_texture(&set->sprite, "./textures/sprite.xpm", mlx))
-		return (print_error("Sprite texture not found"));
+	// if (get_texture(&set->north, "./textures/grass.xpm", mlx))
+	// 	return (print_error("North texture not found"));
+	// if (get_texture(&set->south, "./textures/brick.xpm", mlx))
+	// 	return (print_error("South texture not found"));
+	// if (get_texture(&set->east, "./textures/wood.xpm", mlx))
+	// 	return (print_error("East texture not found"));
+	// if (get_texture(&set->west, "./textures/metal.xpm", mlx))
+	// 	return (print_error("West texture not found"));
+	// if (get_texture(&set->sprite, "./textures/sprite.xpm", mlx))
+	// 	return (print_error("Sprite texture not found"));
 	return (0);
 }
