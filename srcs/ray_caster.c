@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/27 22:45:24 by user42            #+#    #+#             */
-/*   Updated: 2020/05/28 10:59:17 by user42           ###   ########.fr       */
+/*   Updated: 2020/06/04 14:59:23 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,8 +29,8 @@ t_coord		sprite_ver(t_camera *cam, float rad, int **world_map)
 		x_check = 0;
 	else
 		x_check = -1;
-	while (hit.x + x_check >= 0 && hit.x + x_check < MAP_MAX &&
-			hit.y >= 0 && hit.y < MAP_MAX)
+	while (hit.x + x_check >= 0 && hit.x + x_check < cam->max_x &&
+			hit.y >= 0 && hit.y < cam->max_y)
 	{
 		if (world_map[(int)hit.y][(int)hit.x + x_check] == 1)
 			return (hit_wall_before(&cam->x_intercept.x, hit));
@@ -54,8 +54,8 @@ t_coord		sprite_hor(t_camera *cam, float rad, int **world_map)
 		y_check = 0;
 	else
 		y_check = -1;
-	while (hit.x >= 0 && hit.x < MAP_MAX && hit.y + y_check >= 0 &&
-			hit.y + y_check < MAP_MAX)
+	while (hit.x >= 0 && hit.x < cam->max_x && hit.y + y_check >= 0 &&
+			hit.y + y_check < cam->max_y)
 	{
 		if (world_map[(int)hit.y + y_check][(int)hit.x] == 1)
 			return (hit_wall_before(&cam->y_intercept.x, hit));
@@ -455,9 +455,9 @@ int		hit_hor(t_camera *cam, float rad, int **world_map)
 		y_check = 0;
 	else
 		y_check = -1;
-	while (cam->y_intercept.x >= 0 && cam->y_intercept.x < MAP_MAX &&
+	while (cam->y_intercept.x >= 0 && cam->y_intercept.x < cam->max_x &&
 			cam->y_intercept.y + y_check >= 0 &&
-			cam->y_intercept.y + y_check < MAP_MAX)
+			cam->y_intercept.y + y_check < cam->max_y)
 	{
 		if (world_map[(int)cam->y_intercept.y + y_check]
 			[(int)cam->y_intercept.x] == 1)
@@ -483,8 +483,8 @@ int		hit_wall(t_camera *cam, float rad, int **world_map)
 	else
 		x_check = -1;
 	while (cam->x_intercept.x + x_check >= 0 &&
-			cam->x_intercept.x + x_check < MAP_MAX &&
-			cam->x_intercept.y >= 0 && cam->x_intercept.y < MAP_MAX)
+			cam->x_intercept.x + x_check < cam->max_x &&
+			cam->x_intercept.y >= 0 && cam->x_intercept.y < cam->max_y)
 	{
 		if (world_map[(int)cam->x_intercept.y]
 			[(int)cam->x_intercept.x + x_check] == 1)

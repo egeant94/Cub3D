@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/01 11:20:36 by user42            #+#    #+#             */
-/*   Updated: 2020/06/03 14:49:15 by user42           ###   ########.fr       */
+/*   Updated: 2020/06/04 15:09:16 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@ int		**create_map(void)
 	int			i;
 	int			y;
 
-	map = malloc(sizeof(int *) * 6);
+	map = malloc(sizeof(int *) * (6 + 1));
+	map[6] = 0;
 	i = 0;
 	while (i < 6)
 	{
@@ -87,6 +88,23 @@ int			print_error(char *str)
 	write(1, str, len);
 	write(1, "\n", 1);
 	return (1);
+}
+
+void		free_map(t_mlx_data *mlx)
+{
+	int i;
+
+	if (mlx->world_map != 0)
+	{
+		i = 0;
+		while (mlx->world_map[i] != 0)
+		{
+			free(mlx->world_map[i]);
+			i++;
+		}
+		free(mlx->world_map);
+		mlx->world_map = 0;
+	}
 }
 
 void		free_line(char **str)
@@ -203,11 +221,6 @@ int			set_colours(t_settings *set, char *line, t_mlx_data *mlx)
 	return (0);	
 }
 
-// int			get_map(t_settings *set, char *line, t_mlx_data *mlx)
-// {
-
-// }
-
 int			line_to_set(t_settings *set, char *line, t_mlx_data *mlx)
 {
 	if ((mlx->split = ft_split(line, ' ')) == 0)
@@ -232,6 +245,177 @@ int			line_to_set(t_settings *set, char *line, t_mlx_data *mlx)
 	return (0);
 }
 
+int			letter_to_number(char c, int *arr, int i)
+{
+	if (c == ' ')
+		arr[i] = -2;
+	else if (c == '0')
+		arr[i] = 0;
+	else if (c == '1')
+		arr[i] = 1;
+	else if (c == '2')
+		arr[i] = 2;
+	else if (c == 'N')
+		arr[i] = 3;
+	else if (c == 'S')
+		arr[i] = 4;
+	else if (c == 'W')
+		arr[i] = 5;
+	else if (c == 'E')
+		arr[i] = 6;	
+	else
+	{
+		free(arr);
+		return (-1);
+	}
+	return (0);
+}
+
+int			*line_to_arr(t_mlx_data *mlx)
+{
+	int		*arr;
+	int		i;
+
+	if ((arr = malloc((ft_strlen(mlx->line) + 1) * sizeof(*arr))) == 0)
+	{
+		print_error("Malloc failed while parsing the map");
+		return (0);
+	}
+	arr[ft_strlen(mlx->line)] = -1;
+	i = 0;
+	while (mlx->line[i] != 0)
+	{
+		if (letter_to_number(mlx->line[i], arr, i))
+		{
+			print_error("Unknown character in the map");
+			return (0);
+		}
+		i++;
+	}
+	free_line(&mlx->line);
+	return (arr);
+}
+
+int			realloc_map(t_mlx_data *mlx, int size)
+{
+	int		i;
+	int		**new_map;
+
+	i = 0;
+	while (mlx->world_map[i] != 0)
+		i++;
+	if ((new_map = malloc((i + size + 1) * sizeof(int *))) == 0)
+		return (print_error("Malloc failed while parsing the map"));
+	new_map[i + size] = 0;
+	i = 0;
+	while (mlx->world_map[i] != 0)
+	{
+		new_map[i] = mlx->world_map[i];
+		i++;
+	}
+	free(mlx->world_map);
+	mlx->world_map = new_map;
+	return (0);
+}
+
+int			new_format(t_mlx_data *mlx, int i, int y)
+{
+	int	*formated_line;
+
+	i = 0;
+	while (mlx->world_map[i] != 0)
+	{
+		if ((formated_line = malloc((mlx->cam->max_x + 1) * sizeof(int))) == 0)
+			return (print_error("Malloc failed while parsing map"));
+		formated_line[mlx->cam->max_x] = -1;
+		y = 0;
+		while (y < mlx->cam->max_x)
+		{
+			formated_line[y] = -2;
+			y++;
+		}
+		y = 0;
+		while (mlx->world_map[i][y] != -1)
+		{
+			formated_line[y] = mlx->world_map[i][y];
+			y++;
+		}
+		free(mlx->world_map[i]);
+		mlx->world_map[i] = formated_line;
+		i++;
+	}
+	i = 0;
+	while (mlx->world_map[i] != 0)
+	{
+		y = 0;
+		while (mlx->world_map[i][y] != -1)
+		{
+			if (mlx->world_map[i][y] == 3)
+			{
+				mlx->cam->player_x = y;
+				mlx->cam->player_y = i;
+			}
+			if (mlx->world_map[i][y] == -2)
+				ft_printf("c");
+			else
+				ft_printf("%d", mlx->world_map[i][y]);
+			y++;
+		}
+		ft_printf("\n");
+		i++;
+	}
+	ft_printf("Start : %d %d\n", mlx->cam->player_x, mlx->cam->player_y);
+	return (0);
+}
+
+
+int			format_map(t_mlx_data *mlx)
+{
+	int	i;
+	int y;
+
+	i = 0;
+	while (mlx->world_map[i] != 0)
+	{
+		y = 0;
+		while (mlx->world_map[i][y] != -1)
+			y++;
+		if (y > mlx->cam->max_x)
+			mlx->cam->max_x = y;
+		i++;
+	}
+	mlx->cam->max_y = i;
+	ft_printf("%d, %d\n", mlx->cam->max_x, mlx->cam->max_y);
+	if (new_format(mlx, i, y))
+		return (1);
+	return (0);
+}
+
+int			get_map(int ret, t_mlx_data *mlx)
+{
+	int		i;
+
+	if ((mlx->world_map = malloc(2 * sizeof(*(mlx->world_map)))) == 0)
+		return (print_error("Malloc failed while parsing map"));
+	if ((mlx->world_map[0] = line_to_arr(mlx)) == 0)
+		return (1);
+	mlx->world_map[1] = 0;
+	ret = get_next_line(mlx->cub_fd, &mlx->line);
+	i = 1;
+	while (ret != 0)
+	{
+		if (realloc_map(mlx, 1))
+			return (1);
+		if ((mlx->world_map[i] = line_to_arr(mlx)) == 0)
+			return (1);
+		i++;
+		ret = get_next_line(mlx->cub_fd, &mlx->line);
+	}
+	if (format_map(mlx))
+		return (1);
+	return (0);
+}
+
 int			file_reading(t_settings *set, t_mlx_data *mlx)
 {
 	int ret;
@@ -248,9 +432,11 @@ int			file_reading(t_settings *set, t_mlx_data *mlx)
 		free_line(&mlx->line);
 		ret = get_next_line(mlx->cub_fd, &mlx->line);
 	}
-	free_line(&mlx->line);
-
-	(void)set;
+	if (ret != 0)
+	{
+		if (get_map(ret, mlx))
+			return (1);
+	}
 	return (0);
 }
 
@@ -280,6 +466,7 @@ void		init_mlx(t_mlx_data *mlx)
 	mlx->cub_fd = 0;
 	mlx->line = 0;
 	mlx->split = 0;
+	mlx->world_map = 0;
 }
 
 int			init_settings(t_settings *set, t_mlx_data *mlx, int argc,
@@ -290,7 +477,8 @@ int			init_settings(t_settings *set, t_mlx_data *mlx, int argc,
 	set->wall_height = (float)set->s_width / (float)set->s_height / 3.0;
 	// set->floor_c = 0xBBEFDECD;
 	// set->ceiling_c = 0x0000CCFF;
-	mlx->world_map = create_map();
+	// free_map(mlx);
+	// mlx->world_map = create_map();
 	// mlx->mlx = mlx_init();
 	mlx->win = mlx_new_window(mlx->mlx, set->s_width,
 							set->s_height, "Cub3D");

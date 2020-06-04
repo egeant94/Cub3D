@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/17 09:21:38 by osboxes           #+#    #+#             */
-/*   Updated: 2020/06/02 15:21:16 by user42           ###   ########.fr       */
+/*   Updated: 2020/06/04 14:57:23 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,8 @@ typedef struct	s_camera
 	float	*dists;
 	t_coord	*sprites;
 	float	*sprite_dists;
+	int		max_x;
+	int		max_y;
 }				t_camera;
 
 typedef struct	s_movements
@@ -150,4 +152,5 @@ int				get_b(int trgb);
 void			init_mlx(t_mlx_data *mlx);
 void			free_line(char **str);
 void			split_free(t_mlx_data *mlx);
+void			free_map(t_mlx_data *mlx);
 #endif

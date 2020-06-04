@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/27 22:51:03 by user42            #+#    #+#             */
-/*   Updated: 2020/05/27 12:29:06 by user42           ###   ########.fr       */
+/*   Updated: 2020/06/04 15:11:27 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,10 +87,10 @@ void	init_camera(t_camera *cam)
 {
 	cam->player_x = 4;
 	cam->player_y = 2;
-	cam->player_dx = 0.99;
-	cam->player_dy = 0.5;
+	cam->player_dx = 0.51;
+	cam->player_dy = 0.51;
 	cam->h_o_v = 0;
-	cam->beta_ang = 180;
+	cam->beta_ang = 90;
 	cam->theta_ang = 0;
 	cam->x_intercept.x = 0;
 	cam->x_intercept.y = 0;
@@ -103,4 +103,6 @@ void	init_camera(t_camera *cam)
 	cam->sprites = 0;
 	cam->sprite_dists = 0;
 	cam->dists = 0;
+	cam->max_x = 0;
+	cam->max_y = 0;
 }

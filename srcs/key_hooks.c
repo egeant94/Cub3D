@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/01 11:15:10 by user42            #+#    #+#             */
-/*   Updated: 2020/06/02 15:44:37 by user42           ###   ########.fr       */
+/*   Updated: 2020/06/04 15:01:41 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,7 @@ int		quit(t_mlx_data *mlx)
 {
 	free_all(mlx, mlx->cam);
 	close(mlx->cub_fd);
+	free_map(mlx);
 	if (mlx->mlx != 0 && mlx->win != 0)
 		mlx_destroy_window(mlx->mlx, mlx->win);
 	exit(0);
