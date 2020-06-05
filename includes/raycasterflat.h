@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/17 09:21:38 by osboxes           #+#    #+#             */
-/*   Updated: 2020/06/04 14:57:23 by user42           ###   ########.fr       */
+/*   Updated: 2020/06/05 11:26:07 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,4 +153,18 @@ void			init_mlx(t_mlx_data *mlx);
 void			free_line(char **str);
 void			split_free(t_mlx_data *mlx);
 void			free_map(t_mlx_data *mlx);
+int				get_map(int ret, t_mlx_data *mlx);
+int				*line_to_arr(t_mlx_data *mlx);
+int				realloc_map(t_mlx_data *mlx, int size);
+int				format_map(t_mlx_data *mlx);
+int				new_format(t_mlx_data *mlx, int i, int y);
+int				print_error(char *str);
+int				letter_to_number(char c, int *arr, int i);
+void			number_to_pos(t_camera *cam, int i, int y, int nb);
+int				start_position(t_mlx_data *mlx, int i, int y);
+int				get_texture(t_texture *tex, char *path, t_mlx_data *mlx);
+int				set_textures(t_settings *set, char *line, t_mlx_data *mlx);
+void			set_rgb(int *r, int *g, int *b, t_mlx_data *mlx);
+int				set_colours(t_settings *set, char *line, t_mlx_data *mlx);
+int				split_len(char **tab);
 #endif
