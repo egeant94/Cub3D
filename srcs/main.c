@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/17 09:18:23 by osboxes           #+#    #+#             */
-/*   Updated: 2020/06/02 11:40:03 by user42           ###   ########.fr       */
+/*   Updated: 2020/06/05 11:36:41 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,8 @@ int		check_args(int argc, char **argv)
 		write(1, "Error\nToo many arguments\n", 26);
 		return (1);
 	}
-	if (((len = ft_strlen(argv[1])) < 5) || ft_strncmp(argv[1] + len - 4, ".cub", 4) != 0)
+	if (((len = ft_strlen(argv[1])) < 5)
+			|| ft_strncmp(argv[1] + len - 4, ".cub", 4) != 0)
 	{
 		write(1, "Error\nConfig file extension isn't .cub\n", 40);
 		return (1);

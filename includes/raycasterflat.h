@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/17 09:21:38 by osboxes           #+#    #+#             */
-/*   Updated: 2020/06/05 11:26:07 by user42           ###   ########.fr       */
+/*   Updated: 2020/06/05 11:51:49 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ typedef struct	s_camera
 	int		player_y;
 	float	player_dx;
 	float	player_dy;
+	float	wall_offset;
 	float	h_o_v;
 	float	beta_ang;
 	float	theta_ang;
@@ -118,8 +119,8 @@ void			first_int(t_camera *cam, float rad,
 int				hit_hor(t_camera *cam, float rad, int **world_map);
 int				hit_wall(t_camera *cam, float rad, int **world_map);
 float			min_ray_dist(t_camera *cam, int **world_map, float angle);
-void			print_vertical_line(t_mlx_data *mlx, int x,
-									float dist, t_camera cam);
+void			print_vertical_line(t_mlx_data *mlx, int x, float dist);
+void			print_vline_2(t_mlx_data *mlx, int x, float dist, float tex_y);
 void			floor_and_ceiling(t_mlx_data *mlx);
 int				frame_render(t_mlx_data *mlx, t_camera *cam,
 										int **world_map);
@@ -167,4 +168,8 @@ int				set_textures(t_settings *set, char *line, t_mlx_data *mlx);
 void			set_rgb(int *r, int *g, int *b, t_mlx_data *mlx);
 int				set_colours(t_settings *set, char *line, t_mlx_data *mlx);
 int				split_len(char **tab);
+int				line_to_set(t_settings *set, char *line, t_mlx_data *mlx);
+int				file_reading(t_settings *set, t_mlx_data *mlx);
+int				parse_cub(t_settings *set, t_mlx_data *mlx,
+							int argc, char **argv);
 #endif
