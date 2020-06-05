@@ -6,7 +6,7 @@
 #    By: user42 <user42@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/12 15:21:23 by egeant            #+#    #+#              #
-#    Updated: 2020/06/05 11:34:08 by user42           ###   ########.fr        #
+#    Updated: 2020/06/05 12:18:16 by user42           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,8 @@ ODIR	= obj/
 HEADERS	= includes
 SOURCES	= 	angles.c display.c display_utils.c main.c movements.c ray_caster.c	\
 			settings.c key_hooks.c colors.c map_parse.c start_pos.c				\
-			free_utils.c rgb_parse.c settings_utils.c
+			free_utils.c rgb_parse.c settings_utils.c calc_sprites.c			\
+			print_sprites.c ray_caster_utils.c
 SRCS	= $(addprefix $(SDIR),$(SOURCES))
 OBJS	= $(addprefix $(ODIR),$(SOURCES:.c=.o))
 LIBFT	= ./libft/libft.a

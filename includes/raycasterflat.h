@@ -6,13 +6,12 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/17 09:21:38 by osboxes           #+#    #+#             */
-/*   Updated: 2020/06/05 11:51:49 by user42           ###   ########.fr       */
+/*   Updated: 2020/06/05 12:20:20 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef RAYCASTERFLAT_H
 # define RAYCASTERFLAT_H
-# define MAP_MAX 6
 # define FOV 110
 # define SPEED_M 1
 # define M_PI 3.14159265358979323846
@@ -172,4 +171,19 @@ int				line_to_set(t_settings *set, char *line, t_mlx_data *mlx);
 int				file_reading(t_settings *set, t_mlx_data *mlx);
 int				parse_cub(t_settings *set, t_mlx_data *mlx,
 							int argc, char **argv);
+float			rad_ang_calc(t_coord hit, t_camera *cam, float dist);
+int				add_sprite(t_camera *cam, int x, int y);
+int				ray_looper(t_mlx_data *mlx, t_camera *cam,
+							float plan_size, int **world_map);
+int				display_sprites(t_mlx_data *mlx, t_camera *cam);
+void			first_int(t_camera *cam, float rad,
+							t_coord *x_inter, t_coord *y_inter);
+float			dist_calc(t_coord hit, t_camera *cam);
+t_coord			sprite_center(t_coord hit);
+void			sprite_sorter(float *sprite_dists, t_camera *cam);
+void			print_sprite(t_mlx_data *mlx, float dist, int x, t_texture *tex);
+float			rad_ang_calc(t_coord hit, t_camera *cam, float dist);
+void			print_sprites(t_mlx_data *mlx, t_camera *cam, t_texture *tex);
+void			vertical_sprite_line(float dist, float width, t_mlx_data *mlx, int x);
+
 #endif
