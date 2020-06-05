@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/17 09:21:38 by osboxes           #+#    #+#             */
-/*   Updated: 2020/06/05 12:20:20 by user42           ###   ########.fr       */
+/*   Updated: 2020/06/05 12:28:26 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,9 +181,11 @@ void			first_int(t_camera *cam, float rad,
 float			dist_calc(t_coord hit, t_camera *cam);
 t_coord			sprite_center(t_coord hit);
 void			sprite_sorter(float *sprite_dists, t_camera *cam);
-void			print_sprite(t_mlx_data *mlx, float dist, int x, t_texture *tex);
+void			print_sprite(t_mlx_data *mlx, float dist,
+								int x, t_texture *tex);
 float			rad_ang_calc(t_coord hit, t_camera *cam, float dist);
 void			print_sprites(t_mlx_data *mlx, t_camera *cam, t_texture *tex);
-void			vertical_sprite_line(float dist, float width, t_mlx_data *mlx, int x);
+void			vertical_sprite_line(float dist, float width,
+										t_mlx_data *mlx, int x);
 
 #endif

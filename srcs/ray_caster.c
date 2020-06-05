@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/27 22:45:24 by user42            #+#    #+#             */
-/*   Updated: 2020/06/05 12:09:53 by user42           ###   ########.fr       */
+/*   Updated: 2020/06/05 12:24:04 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,8 @@ int		frame_render(t_mlx_data *mlx, t_camera *cam, int **world_map)
 	return (0);
 }
 
-int		ray_looper(t_mlx_data *mlx, t_camera *cam, float plan_size, int **world_map)
+int		ray_looper(t_mlx_data *mlx, t_camera *cam,
+					float plan_size, int **world_map)
 {
 	int		column;
 	float	quad_theta;
@@ -44,7 +45,7 @@ int		ray_looper(t_mlx_data *mlx, t_camera *cam, float plan_size, int **world_map
 		cam->dists[column] = min_ray_dist(cam, world_map, quad_theta);
 		if (cam->dists[column] == -2)
 			return (-1);
-		print_vertical_line(mlx, column, cam->dists[column]);						
+		print_vertical_line(mlx, column, cam->dists[column]);
 		cam_plan = cam_plan - ((plan_size / (mlx->set->s_width - 1)) * 2);
 		column++;
 	}

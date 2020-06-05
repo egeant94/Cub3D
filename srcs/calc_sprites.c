@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/05 12:04:43 by user42            #+#    #+#             */
-/*   Updated: 2020/06/05 12:06:48 by user42           ###   ########.fr       */
+/*   Updated: 2020/06/05 12:24:39 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ float	rad_ang_calc(t_coord hit, t_camera *cam, float dist)
 			pow(hit.y - (cam->player_y + cam->player_dy), 2));
 	rad_ang = acos(fabs((cam->player_x + cam->player_dx) - hit.x) / dist);
 	if (cam->player_x + cam->player_dx > hit.x
-		&& cam->player_y + cam->player_dy > hit.y) 
+		&& cam->player_y + cam->player_dy > hit.y)
 		rad_ang = M_PI - rad_ang;
 	else if (cam->player_x + cam->player_dx > hit.x
 		&& cam->player_y + cam->player_dy < hit.y)
@@ -40,7 +40,7 @@ t_coord	sprite_center(t_coord hit)
 	center.x = hit.x + 0.5;
 	center.y = hit.y + 0.5;
 	return (center);
-}	
+}
 
 int		add_sprite(t_camera *cam, int x, int y)
 {

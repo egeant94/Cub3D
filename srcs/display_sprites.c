@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   print_sprites.c                                    :+:      :+:    :+:   */
+/*   display_sprites.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/05 12:03:53 by user42            #+#    #+#             */
-/*   Updated: 2020/06/05 12:18:04 by user42           ###   ########.fr       */
+/*   Updated: 2020/06/05 12:27:21 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ float	dist_calc(t_coord hit, t_camera *cam)
 			pow(hit.y - (cam->player_y + cam->player_dy), 2));
 	rad_ang = acos(fabs((cam->player_x + cam->player_dx) - hit.x) / dist);
 	if (cam->player_x + cam->player_dx > hit.x
-		&& cam->player_y + cam->player_dy > hit.y) 
+		&& cam->player_y + cam->player_dy > hit.y)
 		rad_ang = M_PI - (rad_ang + rad_beta);
 	else if (cam->player_x + cam->player_dx > hit.x
 		&& cam->player_y + cam->player_dy < hit.y)
@@ -74,12 +74,8 @@ void	print_sprites(t_mlx_data *mlx, t_camera *cam, t_texture *tex)
 		rad_ang = rad_ang_calc(
 					sprite_center(cam->sprites[i]), cam, cam->sprite_dists[i]);
 		pixel = 2;
-		// if (cam->tile_step_x == -1)
-		// 	test = 1 - (tan(rad_ang) + cam->plan_size) / (cam->plan_size * 2);
-		// else
 		test = (tan(rad_ang) + cam->plan_size) / (cam->plan_size * 2);
 		pixel = test * mlx->set->s_width;
-		// printf("sprite %d = x : %f, y : %f, dist : %f, ang : %f, tan : %f\n", i, cam->sprites[i].x, cam->sprites[i].y, cam->sprite_dists[i], rad_ang * 180 / M_PI, test);
 		print_sprite(mlx, cam->sprite_dists[i], pixel, tex);
 		i++;
 	}
@@ -91,14 +87,16 @@ void	print_sprite(t_mlx_data *mlx, float dist, int x, t_texture *tex)
 	int			hor;
 
 	(void)tex;
-	width = (float)mlx->set->s_width / (dist * mlx->set->s_width *2.87);
+	width = (float)mlx->set->s_width / (dist * mlx->set->s_width * 2.87);
 	hor = x - (width * mlx->set->s_width / 2);
 	while (1)
 	{
 		if (hor >= x + (width * mlx->set->s_width / 2))
 			return ;
 		if (hor > 0 && hor < mlx->set->s_width && dist < mlx->cam->dists[hor])
-			vertical_sprite_line(dist,  (hor - x + (width * mlx->set->s_width / 2))/ (width * mlx->set->s_width), mlx, hor);
+			vertical_sprite_line(dist,
+								(hor - x + (width * mlx->set->s_width / 2))
+								/ (width * mlx->set->s_width), mlx, hor);
 		hor++;
 	}
 }
@@ -115,7 +113,8 @@ void	vertical_sprite_line(float dist, float width, t_mlx_data *mlx, int x)
 	while (y < mlx->set->s_height && y < mlx->set->s_height - wall_offset)
 	{
 		tex_y += inc_tex_y(wall_offset, &mlx->set->sprite, mlx, dist);
-		color = my_mlx_pixel_reverse(&mlx->set->sprite, width * mlx->set->sprite.width, (int)tex_y);
+		color = my_mlx_pixel_reverse(&mlx->set->sprite,
+								width * mlx->set->sprite.width, (int)tex_y);
 		if (get_t(color) != 0)
 			my_mlx_pixel_put(mlx, x, y, color);
 		y++;
