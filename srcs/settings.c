@@ -6,16 +6,47 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/01 11:20:36 by user42            #+#    #+#             */
-/*   Updated: 2020/06/05 11:35:16 by user42           ###   ########.fr       */
+/*   Updated: 2020/06/08 15:03:38 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/raycasterflat.h"
 
+int			verify_settings(t_settings *set, t_mlx_data *mlx)
+{
+	int	x;
+	int y;
+
+	mlx_get_screen_size(mlx->mlx, &x, &y);
+	if (set->s_width > x)
+		set->s_width = x;
+	if (set->s_height > y)
+		set->s_height = y;
+	if (set->floor_c == -1)
+		return (print_error("Floor color is missing."));
+	if (set->ceiling_c == -1)
+		return (print_error("Ceiling color is missing."));
+	if (set->north.img  == 0)
+		return (print_error("North texture is missing."));
+	if (set->south.img == 0)
+		return (print_error("South texture is missing."));
+	if (set->west.img == 0)
+		return (print_error("West texture is missing."));
+	if (set->east.img == 0)
+		return (print_error("East texture is missing."));
+	if (set->sprite.img == 0)
+		return (print_error("Sprite texture is missing."));
+	return (0);
+}
+
+
 int			init_settings(t_settings *set, t_mlx_data *mlx, int argc,
 							char **argv)
 {
+	init_set(set);
 	if (parse_cub(set, mlx, argc, argv))
+		return (1);
+	if (verify_settings(set, mlx))
 		return (1);
 	set->wall_height = (float)set->s_width / (float)set->s_height / 3.0;
 	mlx->win = mlx_new_window(mlx->mlx, set->s_width,

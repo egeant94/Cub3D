@@ -4,7 +4,7 @@ NO ./textures/grass.xpm
 SO ./textures/metal.xpm
 
 F  133,94,66
-R  1280 720
+R  9999999999999 720
 WE ./textures/wood.xpm
 EA ./textures/brick.xpm
 

@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/17 09:21:38 by osboxes           #+#    #+#             */
-/*   Updated: 2020/06/05 12:28:26 by user42           ###   ########.fr       */
+/*   Updated: 2020/06/08 15:00:33 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <mlx.h>
 # include "../libft/libft.h"
 # include "../printf/includes/ft_printf.h"
+# include "../minilibx_linux/mlx.h"
 # include <math.h>
 # include <string.h>
 # include <unistd.h>
@@ -187,5 +188,6 @@ float			rad_ang_calc(t_coord hit, t_camera *cam, float dist);
 void			print_sprites(t_mlx_data *mlx, t_camera *cam, t_texture *tex);
 void			vertical_sprite_line(float dist, float width,
 										t_mlx_data *mlx, int x);
-
+void			init_set(t_settings *set);
+int				mlx_get_screen_size(void *mlx_ptr, int *sizex, int *sizey);
 #endif

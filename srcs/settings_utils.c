@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/05 11:31:17 by user42            #+#    #+#             */
-/*   Updated: 2020/06/05 11:56:21 by user42           ###   ########.fr       */
+/*   Updated: 2020/06/08 14:51:30 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,4 +71,17 @@ void		init_camera(t_camera *cam)
 	cam->dists = 0;
 	cam->max_x = 0;
 	cam->max_y = 0;
+}
+
+void		init_set(t_settings *set)
+{
+	set->s_width = -1;
+	set->s_height = -1;
+	set->floor_c = -1;
+	set->ceiling_c = -1;
+	set->north.img = 0;
+	set->south.img = 0;
+	set->west.img = 0;
+	set->east.img = 0;
+	set->sprite.img = 0;
 }
