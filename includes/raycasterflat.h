@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/17 09:21:38 by osboxes           #+#    #+#             */
-/*   Updated: 2020/06/08 15:00:33 by user42           ###   ########.fr       */
+/*   Updated: 2020/06/09 14:03:00 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -190,4 +190,5 @@ void			vertical_sprite_line(float dist, float width,
 										t_mlx_data *mlx, int x);
 void			init_set(t_settings *set);
 int				mlx_get_screen_size(void *mlx_ptr, int *sizex, int *sizey);
+int				check_map(t_mlx_data *mlx);
 #endif
