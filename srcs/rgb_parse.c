@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/05 11:24:09 by user42            #+#    #+#             */
-/*   Updated: 2020/06/05 11:27:03 by user42           ###   ########.fr       */
+/*   Updated: 2020/06/09 15:04:39 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,13 @@
 
 int			get_texture(t_texture *tex, char *path, t_mlx_data *mlx)
 {
+	if (split_len(mlx->split) == 1)
+	{
+		if (mlx->line[0] == 'S' && mlx->line[1] != 'O')
+			path = mlx->line + 1;
+		else
+			path = mlx->line + 2;
+	}
 	tex->img = mlx_xpm_file_to_image(mlx->mlx, path, &tex->width, &tex->height);
 	if (tex->img != 0)
 	{
@@ -27,7 +34,7 @@ int			get_texture(t_texture *tex, char *path, t_mlx_data *mlx)
 
 int			set_textures(t_settings *set, char *line, t_mlx_data *mlx)
 {
-	if (ft_strlen(line) >= 2 && split_len(mlx->split) >= 2)
+	if (ft_strlen(line) >= 2 && split_len(mlx->split) >= 1)
 	{
 		if (line[0] == 'N' && line[1] == 'O')
 			if (get_texture(&set->north, mlx->split[1], mlx))
@@ -42,7 +49,7 @@ int			set_textures(t_settings *set, char *line, t_mlx_data *mlx)
 			if (get_texture(&set->east, mlx->split[1], mlx))
 				return (print_error("East texture not found"));
 	}
-	if (ft_strlen(line) >= 1 && split_len(mlx->split) >= 2)
+	if (ft_strlen(line) >= 1 && split_len(mlx->split) >= 1)
 		if (line[0] == 'S' && line[1] != 'O')
 			if (get_texture(&set->sprite, mlx->split[1], mlx))
 				return (print_error("Sprite texture not found"));
@@ -54,22 +61,22 @@ void		set_rgb(int *r, int *g, int *b, t_mlx_data *mlx)
 	int i;
 
 	i = 0;
-	*r = ft_atoi(mlx->split[1]);
-	while (mlx->split[1][i] != 0)
+	*r = ft_atoi(mlx->line + 1);
+	while (mlx->line[i] != 0)
 	{
-		if (mlx->split[1][i] == ',')
+		if (mlx->line[i] == ',')
 		{
-			*g = ft_atoi(mlx->split[1] + i + 1);
+			*g = ft_atoi(mlx->line + i + 1);
 			i++;
 			break ;
 		}
 		i++;
 	}
-	while (mlx->split[1][i] != 0)
+	while (mlx->line[i] != 0)
 	{
-		if (mlx->split[1][i] == ',')
+		if (mlx->line[i] == ',')
 		{
-			*b = ft_atoi(mlx->split[1] + i + 1);
+			*b = ft_atoi(mlx->line + i + 1);
 			break ;
 		}
 		i++;
