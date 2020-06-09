@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/07 17:16:34 by user42            #+#    #+#             */
-/*   Updated: 2020/05/21 12:07:44 by user42           ###   ########.fr       */
+/*   Updated: 2020/06/09 11:11:40 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,9 @@ t_texture	*nwse_tex(t_camera cam, t_mlx_data *mlx)
 	else if (cam.h_o_v == 2 && cam.tile_step_x == -1)
 		return (&mlx->set->west);
 	else if (cam.h_o_v == 1 && cam.tile_step_y == -1)
-		return (&mlx->set->south);
-	else
 		return (&mlx->set->north);
+	else
+		return (&mlx->set->south);
 }
 
 float		wall_offseter(float dist, t_texture *tex, float *tex_y,
