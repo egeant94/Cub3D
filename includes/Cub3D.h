@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   raycasterflat.h                                    :+:      :+:    :+:   */
+/*   Cub3D.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/17 09:21:38 by osboxes           #+#    #+#             */
-/*   Updated: 2020/06/11 09:43:26 by user42           ###   ########.fr       */
+/*   Updated: 2020/06/11 10:24:06 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,7 +123,7 @@ void			print_vertical_line(t_mlx_data *mlx, int x, float dist);
 void			print_vline_2(t_mlx_data *mlx, int x, float dist, float tex_y);
 void			floor_and_ceiling(t_mlx_data *mlx);
 int				frame_render(t_mlx_data *mlx, t_camera *cam,
-										int **world_map);
+										int **world_map, int save);
 void			fix_player_pos(t_camera *cam);
 void			change_player_pos(t_camera *cam, int **world_map, t_coord temp);
 void			move(t_camera *cam, int **world_map, int dir);
@@ -170,8 +170,7 @@ int				set_colours(t_settings *set, char *line, t_mlx_data *mlx);
 int				split_len(char **tab);
 int				line_to_set(t_settings *set, char *line, t_mlx_data *mlx);
 int				file_reading(t_settings *set, t_mlx_data *mlx);
-int				parse_cub(t_settings *set, t_mlx_data *mlx,
-							int argc, char **argv);
+int				parse_cub(t_settings *set, t_mlx_data *mlx, char **argv);
 float			rad_ang_calc(t_coord hit, t_camera *cam, float dist);
 int				add_sprite(t_camera *cam, int x, int y);
 int				ray_looper(t_mlx_data *mlx, t_camera *cam,
@@ -191,4 +190,5 @@ void			vertical_sprite_line(float dist, float width,
 void			init_set(t_settings *set);
 int				mlx_get_screen_size(void *mlx_ptr, int *sizex, int *sizey);
 int				check_map(t_mlx_data *mlx);
+int				save_bmp(t_mlx_data *mlx);
 #endif

@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/27 22:51:03 by user42            #+#    #+#             */
-/*   Updated: 2020/06/11 09:43:59 by user42           ###   ########.fr       */
+/*   Updated: 2020/06/11 11:33:35 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,6 @@ void	print_vline_2(t_mlx_data *mlx, int x, float dist, float tex_y)
 			my_mlx_pixel_put(mlx, x, y, mlx->set->floor_c);
 		else
 		{
-			tex_y += inc_tex_y(mlx->cam->wall_offset, tex, mlx, dist);
 			if (mlx->cam->h_o_v == 1)
 				my_mlx_pixel_put(mlx, x, y, my_mlx_pixel_reverse(tex,
 					(mlx->cam->y_intercept.x - (int)mlx->cam->y_intercept.x)
@@ -44,6 +43,7 @@ void	print_vline_2(t_mlx_data *mlx, int x, float dist, float tex_y)
 				my_mlx_pixel_put(mlx, x, y, my_mlx_pixel_reverse(tex,
 					(mlx->cam->x_intercept.y - (int)mlx->cam->x_intercept.y)
 					* tex->width, (int)tex_y));
+			tex_y += inc_tex_y(mlx->cam->wall_offset, tex, mlx, dist);
 		}
 		y++;
 	}

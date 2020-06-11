@@ -6,13 +6,13 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/27 22:45:24 by user42            #+#    #+#             */
-/*   Updated: 2020/06/11 09:44:17 by user42           ###   ########.fr       */
+/*   Updated: 2020/06/11 10:24:41 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/Cub3D.h"
 
-int		frame_render(t_mlx_data *mlx, t_camera *cam, int **world_map)
+int		frame_render(t_mlx_data *mlx, t_camera *cam, int **world_map, int save)
 {
 	cam->plan_size = tan((FOV / 2) * M_PI / 180.0);
 	mlx->img = mlx_new_image(mlx->mlx, mlx->set->s_width, mlx->set->s_height);
@@ -24,6 +24,8 @@ int		frame_render(t_mlx_data *mlx, t_camera *cam, int **world_map)
 		return (-1);
 	if (display_sprites(mlx, cam) == -1)
 		return (-1);
+	if (save == 1)
+		return (0);
 	mlx_put_image_to_window(mlx->mlx, mlx->win, mlx->img, 0, 0);
 	free_all(mlx, cam);
 	return (0);

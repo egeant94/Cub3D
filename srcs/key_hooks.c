@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/01 11:15:10 by user42            #+#    #+#             */
-/*   Updated: 2020/06/11 09:44:08 by user42           ###   ########.fr       */
+/*   Updated: 2020/06/11 10:25:25 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ int		renderer(t_mlx_data *mlx)
 	if (mlx->move->cam_right)
 		mlx->cam->beta_ang -= 3;
 	angle_over_under(&mlx->cam->beta_ang);
-	if (frame_render(mlx, mlx->cam, mlx->world_map) == -1)
+	if (frame_render(mlx, mlx->cam, mlx->world_map, 0) == -1)
 		return (quit(mlx));
 	return (1);
 }

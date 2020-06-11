@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/01 11:20:36 by user42            #+#    #+#             */
-/*   Updated: 2020/06/11 09:43:44 by user42           ###   ########.fr       */
+/*   Updated: 2020/06/11 11:25:59 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,27 +45,26 @@ int			init_settings(t_settings *set, t_mlx_data *mlx, int argc,
 							char **argv)
 {
 	init_set(set);
-	if (parse_cub(set, mlx, argc, argv))
+	if (parse_cub(set, mlx, argv))
 		return (1);
 	if (verify_settings(set, mlx))
 		return (1);
 	set->wall_height = (float)set->s_width / (float)set->s_height / 3.0;
+	mlx->set = set;
+	if (argc > 2)
+		if (save_bmp(mlx))
+			return (1);
 	mlx->win = mlx_new_window(mlx->mlx, set->s_width,
 							set->s_height, "Cub3D");
 	return (0);
 }
 
-int			parse_cub(t_settings *set, t_mlx_data *mlx, int argc, char **argv)
+int			parse_cub(t_settings *set, t_mlx_data *mlx, char **argv)
 {
 	if ((mlx->cub_fd = open(argv[1], O_RDONLY)) == -1)
 		return (print_error(strerror(errno)));
 	if (file_reading(set, mlx))
 		return (1);
-	if (argc > 2)
-	{
-		ft_printf("Saving first image\n");
-		return (1);
-	}
 	return (0);
 }
 
@@ -106,7 +105,7 @@ int			line_to_set(t_settings *set, char *line, t_mlx_data *mlx)
 				return (print_error("Resolution lacks a parameter."));
 			set->s_width = ft_atoi(mlx->split[1]);
 			set->s_height = ft_atoi(mlx->split[2]);
-			if (set->s_width <= 1 || set->s_height <= 0)
+			if (set->s_width <= 99 || set->s_height <= 99)
 				return (print_error("Resolution is too small."));
 		}
 		if (set_textures(set, line, mlx))
