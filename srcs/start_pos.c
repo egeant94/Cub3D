@@ -6,11 +6,11 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/05 11:15:59 by user42            #+#    #+#             */
-/*   Updated: 2020/06/05 11:20:27 by user42           ###   ########.fr       */
+/*   Updated: 2020/06/11 09:44:28 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/raycasterflat.h"
+#include "../includes/Cub3D.h"
 
 int			start_position(t_mlx_data *mlx, int i, int y)
 {

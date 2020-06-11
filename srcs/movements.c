@@ -6,11 +6,11 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/27 22:52:04 by user42            #+#    #+#             */
-/*   Updated: 2020/05/01 11:15:19 by user42           ###   ########.fr       */
+/*   Updated: 2020/06/11 09:44:13 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/raycasterflat.h"
+#include "../includes/Cub3D.h"
 
 void	fix_player_pos(t_camera *cam)
 {

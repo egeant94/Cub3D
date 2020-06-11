@@ -6,11 +6,11 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/05 11:21:28 by user42            #+#    #+#             */
-/*   Updated: 2020/06/05 11:22:41 by user42           ###   ########.fr       */
+/*   Updated: 2020/06/11 09:44:04 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/raycasterflat.h"
+#include "../includes/Cub3D.h"
 
 void		free_map(t_mlx_data *mlx)
 {

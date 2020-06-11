@@ -6,11 +6,11 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/01 11:20:36 by user42            #+#    #+#             */
-/*   Updated: 2020/06/09 14:08:29 by user42           ###   ########.fr       */
+/*   Updated: 2020/06/11 09:43:44 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/raycasterflat.h"
+#include "../includes/Cub3D.h"
 
 int			verify_settings(t_settings *set, t_mlx_data *mlx)
 {

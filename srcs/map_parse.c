@@ -6,11 +6,11 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/05 11:10:04 by user42            #+#    #+#             */
-/*   Updated: 2020/06/05 11:12:22 by user42           ###   ########.fr       */
+/*   Updated: 2020/06/11 09:44:11 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/raycasterflat.h"
+#include "../includes/Cub3D.h"
 
 int			get_map(int ret, t_mlx_data *mlx)
 {

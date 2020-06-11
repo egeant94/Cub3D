@@ -6,12 +6,12 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/17 09:21:38 by osboxes           #+#    #+#             */
-/*   Updated: 2020/06/09 14:03:00 by user42           ###   ########.fr       */
+/*   Updated: 2020/06/11 09:43:26 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef RAYCASTERFLAT_H
-# define RAYCASTERFLAT_H
+#ifndef CUB3D_H
+# define CUB3D_H
 # define FOV 110
 # define SPEED_M 1
 # define M_PI 3.14159265358979323846

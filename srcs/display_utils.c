@@ -6,11 +6,11 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/07 17:16:34 by user42            #+#    #+#             */
-/*   Updated: 2020/06/09 11:11:40 by user42           ###   ########.fr       */
+/*   Updated: 2020/06/11 09:43:57 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/raycasterflat.h"
+#include "../includes/Cub3D.h"
 
 t_texture	*nwse_tex(t_camera cam, t_mlx_data *mlx)
 {

@@ -6,11 +6,11 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/05 12:17:56 by user42            #+#    #+#             */
-/*   Updated: 2020/06/05 12:18:06 by user42           ###   ########.fr       */
+/*   Updated: 2020/06/11 09:44:15 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/raycasterflat.h"
+#include "../includes/Cub3D.h"
 
 void	first_int(t_camera *cam, float rad, t_coord *x_inter, t_coord *y_inter)
 {

@@ -6,11 +6,11 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/28 10:40:41 by user42            #+#    #+#             */
-/*   Updated: 2020/06/03 14:48:43 by user42           ###   ########.fr       */
+/*   Updated: 2020/06/11 09:43:52 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/raycasterflat.h"
+#include "../includes/Cub3D.h"
 
 int			create_trgb(int t, int r, int g, int b)
 {

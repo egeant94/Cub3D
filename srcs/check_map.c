@@ -6,11 +6,11 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/09 14:01:59 by user42            #+#    #+#             */
-/*   Updated: 2020/06/09 14:08:01 by user42           ###   ########.fr       */
+/*   Updated: 2020/06/11 09:43:51 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/raycasterflat.h"
+#include "../includes/Cub3D.h"
 
 int			check_cell(int *previous, int add, t_coord check, t_mlx_data *mlx)
 {

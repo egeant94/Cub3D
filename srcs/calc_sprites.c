@@ -6,11 +6,11 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/05 12:04:43 by user42            #+#    #+#             */
-/*   Updated: 2020/06/05 12:24:39 by user42           ###   ########.fr       */
+/*   Updated: 2020/06/11 09:43:48 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/raycasterflat.h"
+#include "../includes/Cub3D.h"
 
 float	rad_ang_calc(t_coord hit, t_camera *cam, float dist)
 {

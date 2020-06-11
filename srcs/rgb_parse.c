@@ -6,11 +6,11 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/06/05 11:24:09 by user42            #+#    #+#             */
-/*   Updated: 2020/06/09 15:04:39 by user42           ###   ########.fr       */
+/*   Updated: 2020/06/11 09:44:19 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/raycasterflat.h"
+#include "../includes/Cub3D.h"
 
 int			get_texture(t_texture *tex, char *path, t_mlx_data *mlx)
 {
