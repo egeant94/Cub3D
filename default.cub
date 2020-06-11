@@ -3,7 +3,7 @@ C  0,191,255
 NO./textures/grass.xpm
 SO./textures/metal.xpm
 F            133 ,    94    ,      66
-R  1280           720
+R  1280          720
 WE ./textures/wood.xpm
 EA ./textures/brick.xpm
 

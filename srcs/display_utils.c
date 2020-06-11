@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/07 17:16:34 by user42            #+#    #+#             */
-/*   Updated: 2020/06/11 09:43:57 by user42           ###   ########.fr       */
+/*   Updated: 2020/06/11 13:13:53 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,14 @@ int			init_y(float wall_offset)
 
 float		inc_tex_y(float w_o, t_texture *tex, t_mlx_data *mlx, float dist)
 {
+	int tex_height;
+	int s_height;
+
+	tex_height = tex->height - 1;
+	s_height = mlx->set->s_height;
 	if (w_o > 0)
-		return (tex->height / (mlx->set->s_height - w_o * 2));
+		return (tex_height/ (s_height - w_o * 2));
 	else
 		return ((1 / ((float)mlx->set->wall_height / dist))
-				* tex->height / mlx->set->s_height);
+				* tex_height / s_height);
 }

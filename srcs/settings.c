@@ -6,7 +6,7 @@
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/01 11:20:36 by user42            #+#    #+#             */
-/*   Updated: 2020/06/11 11:25:59 by user42           ###   ########.fr       */
+/*   Updated: 2020/06/11 13:14:17 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ int			line_to_set(t_settings *set, char *line, t_mlx_data *mlx)
 				return (print_error("Resolution lacks a parameter."));
 			set->s_width = ft_atoi(mlx->split[1]);
 			set->s_height = ft_atoi(mlx->split[2]);
-			if (set->s_width <= 99 || set->s_height <= 99)
+			if (set->s_width <= 2 || set->s_height <= 2)
 				return (print_error("Resolution is too small."));
 		}
 		if (set_textures(set, line, mlx))
