@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/Cub3D.h"
+#include "../includes/cub3d.h"
 
 int		frame_render(t_mlx_data *mlx, t_camera *cam, int **world_map, int save)
 {

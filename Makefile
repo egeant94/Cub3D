@@ -20,7 +20,7 @@ SOURCES	= 	angles.c display.c display_utils.c main.c movements.c ray_caster.c	\
 SRCS	= $(addprefix $(SDIR),$(SOURCES))
 OBJS	= $(addprefix $(ODIR),$(SOURCES:.c=.o))
 LIBFT	= ./libft/libft.a
-MLXFLAGS= -L./minilibx_linux -lm -lmlx_Linux -lbsd -lXext -lX11 -L./printf -lftprintf
+MLXFLAGS= -L./minilibx_linux -lm -lmlx_Linux -lbsd -lXext -lX11
 CFLAGS	= -Wall -Wextra -Werror -fsanitize=address
 CC		= gcc
 NAME	= Cub3d
@@ -31,7 +31,6 @@ all:	$(NAME)
 $(NAME):	$(OBJS)
 			@make -C libft
 			@make -C minilibx_linux
-			@make -C printf
 			@gcc $(CFLAGS) $(OBJS) $(MLXFLAGS) $(LIBFT) -o $(NAME)
 			
 $(ODIR)%.o: $(SDIR)%.c
@@ -42,13 +41,11 @@ clean:
 		@$(RM) $(OBJS)
 		@rm -rf $(ODIR)
 		@make clean -C libft
-		@make clean -C printf
 
 fclean: clean
 		@$(RM) $(NAME)
 		@make fclean -C libft
 		@make clean -C minilibx_linux
-		@make fclean -C printf
 
 re:	fclean all
 

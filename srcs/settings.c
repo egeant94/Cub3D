@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/Cub3D.h"
+#include "../includes/cub3d.h"
 
 int			verify_settings(t_settings *set, t_mlx_data *mlx)
 {
@@ -101,6 +101,8 @@ int			line_to_set(t_settings *set, char *line, t_mlx_data *mlx)
 	{
 		if (line[0] == 'R')
 		{
+			if (set->s_width != -1 || set->s_height != -1)
+				return (print_error("Resolution is defined multiple times"));
 			if (split_len(mlx->split) < 3)
 				return (print_error("Resolution lacks a parameter."));
 			set->s_width = ft_atoi(mlx->split[1]);

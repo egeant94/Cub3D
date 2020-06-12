@@ -16,10 +16,7 @@
 # define SPEED_M 1
 # define M_PI 3.14159265358979323846
 # include <stdlib.h>
-# include <stdio.h> //studio.h
-# include <mlx.h>
 # include "../libft/libft.h"
-# include "../printf/includes/ft_printf.h"
 # include "../minilibx_linux/mlx.h"
 # include <math.h>
 # include <string.h>
@@ -191,4 +188,5 @@ void			init_set(t_settings *set);
 int				mlx_get_screen_size(void *mlx_ptr, int *sizex, int *sizey);
 int				check_map(t_mlx_data *mlx);
 int				save_bmp(t_mlx_data *mlx);
+int				unknown_key(char *line);
 #endif

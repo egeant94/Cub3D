@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/Cub3D.h"
+#include "../includes/cub3d.h"
 
 int			check_cell(int *previous, int add, t_coord check, t_mlx_data *mlx)
 {

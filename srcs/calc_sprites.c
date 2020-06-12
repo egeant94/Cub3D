@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/Cub3D.h"
+#include "../includes/cub3d.h"
 
 float	rad_ang_calc(t_coord hit, t_camera *cam, float dist)
 {

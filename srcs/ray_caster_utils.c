@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/Cub3D.h"
+#include "../includes/cub3d.h"
 
 void	first_int(t_camera *cam, float rad, t_coord *x_inter, t_coord *y_inter)
 {
@@ -38,4 +38,21 @@ void	first_int(t_camera *cam, float rad, t_coord *x_inter, t_coord *y_inter)
 		y_inter->x += (cam->player_dy) / tan(rad) * cam->tile_step_x;
 		y_inter->y += (-cam->player_dy);
 	}
+}
+
+int		unknown_key(char *line)
+{
+	if (ft_strlen(line) > 0)
+	{
+		if (line[0] != '\0' && !(line[0] == 'N' && line[1] == 'O')
+			&& !(line[0] == 'S' && line[1] == 'O')
+			&& !(line[0] == 'W' && line[1] == 'E')
+			&& !(line[0] == 'E' && line[1] == 'A')
+			&& !(line[0] == 'S' && line[1] != 'O')
+			&& !(line[0] == 'F')
+			&& !(line[0] == 'C')
+			&& !(line[0] == 'R'))
+			return (print_error("Unkown key in config file"));
+	}
+	return (0);
 }

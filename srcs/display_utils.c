@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/Cub3D.h"
+#include "../includes/cub3d.h"
 
 t_texture	*nwse_tex(t_camera cam, t_mlx_data *mlx)
 {
@@ -57,7 +57,7 @@ float		inc_tex_y(float w_o, t_texture *tex, t_mlx_data *mlx, float dist)
 	tex_height = tex->height - 1;
 	s_height = mlx->set->s_height;
 	if (w_o > 0)
-		return (tex_height/ (s_height - w_o * 2));
+		return (tex_height / (s_height - w_o * 2));
 	else
 		return ((1 / ((float)mlx->set->wall_height / dist))
 				* tex_height / s_height);
