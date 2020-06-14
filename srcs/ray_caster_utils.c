@@ -56,3 +56,17 @@ int		unknown_key(char *line)
 	}
 	return (0);
 }
+
+int		check_line(char *line)
+{
+	int i;
+
+	i = 1;
+	while (line[i] != '\0')
+	{
+		if (!ft_isdigit(line[i]) && line[i] != ' ' && line[i] != ',')
+			return (1);
+		i++;
+	}
+	return (0);
+}

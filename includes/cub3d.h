@@ -191,4 +191,5 @@ int				mlx_get_screen_size(void *mlx_ptr, int *sizex, int *sizey);
 int				check_map(t_mlx_data *mlx);
 int				save_bmp(t_mlx_data *mlx);
 int				unknown_key(char *line);
+int				check_line(char *line);
 #endif

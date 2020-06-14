@@ -110,11 +110,13 @@ int			line_to_set(t_settings *set, char *line, t_mlx_data *mlx)
 			if (set->s_width != -1 || set->s_height != -1)
 				return (print_error("Resolution is defined multiple times"));
 			if (split_len(mlx->split) < 3)
-				return (print_error("Resolution lacks a parameter."));
+				return (print_error("Resolution lacks a parameter"));
+			if (check_line(line))
+				return (print_error("Resolution is flawed"));
 			set->s_width = ft_atoi(mlx->split[1]);
 			set->s_height = ft_atoi(mlx->split[2]);
 			if (set->s_width <= 2 || set->s_height <= 2)
-				return (print_error("Resolution is too small."));
+				return (print_error("Resolution is too small"));
 		}
 		if (set_textures(set, line, mlx))
 			return (1);

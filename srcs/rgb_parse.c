@@ -92,11 +92,15 @@ int			double_color(char *line, t_settings *set)
 	{
 		if (set->floor_c != -1)
 			return (print_error("Floor colour is defined multiple times"));
+		if (check_line(line))
+			return (print_error("Floor color is flawed"));
 	}
 	if (line[0] == 'C')
 	{
 		if (set->ceiling_c != -1)
 			return (print_error("Ceiling colour is defined multiple times"));
+		if (check_line(line))
+			return (print_error("Ceiling color is flawed"));
 	}
 	return (0);
 }
