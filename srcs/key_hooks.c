@@ -92,9 +92,9 @@ int		renderer(t_mlx_data *mlx)
 	if (mlx->move->right)
 		move(mlx->cam, mlx->world_map, -2);
 	if (mlx->move->cam_left)
-		mlx->cam->beta_ang += 3;
+		mlx->cam->beta_ang += mlx->cam_speed;
 	if (mlx->move->cam_right)
-		mlx->cam->beta_ang -= 3;
+		mlx->cam->beta_ang -= mlx->cam_speed;
 	angle_over_under(&mlx->cam->beta_ang);
 	if (frame_render(mlx, mlx->cam, mlx->world_map, 0) == -1)
 		return (quit(mlx));

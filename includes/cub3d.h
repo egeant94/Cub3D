@@ -13,7 +13,7 @@
 #ifndef CUB3D_H
 # define CUB3D_H
 # define FOV 110
-# define SPEED_M 1
+# define SPEED 1
 # define M_PI 3.14159265358979323846
 # include <stdlib.h>
 # include "../libft/libft.h"
@@ -52,6 +52,7 @@ typedef struct	s_camera
 	float	*sprite_dists;
 	int		max_x;
 	int		max_y;
+	int		movement_speed;
 }				t_camera;
 
 typedef struct	s_movements
@@ -102,6 +103,7 @@ typedef struct	s_mlx_data
 	int			cub_fd;
 	char		*line;
 	char		**split;
+	int			cam_speed;
 	t_camera	*cam;
 	t_movements	*move;
 	t_settings	*set;

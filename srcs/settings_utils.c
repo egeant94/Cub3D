@@ -46,6 +46,7 @@ void		init_mlx(t_mlx_data *mlx)
 	mlx->line = 0;
 	mlx->split = 0;
 	mlx->world_map = 0;
+	mlx->cam_speed = 10;
 }
 
 void		init_camera(t_camera *cam)

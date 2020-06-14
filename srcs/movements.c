@@ -74,9 +74,9 @@ void	move(t_camera *cam, int **world_map, int dir)
 	if (dir == -2 || dir == 2)
 		dir = 1;
 	temp.x = fabs(cos(angle_to_quadrant(&temp_angle, cam)
-			* M_PI / 180.0)) * dir * cam->tile_step_x / 20;
+	* M_PI / 180.0)) * dir * cam->tile_step_x / cam->movement_speed * SPEED;
 	temp.y = fabs(sin(angle_to_quadrant(&temp_angle, cam)
-			* M_PI / 180.0)) * dir * cam->tile_step_y / 20;
+	* M_PI / 180.0)) * dir * cam->tile_step_y / cam->movement_speed * SPEED;
 	change_player_pos(cam, world_map, temp);
 }
 
