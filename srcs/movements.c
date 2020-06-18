@@ -38,26 +38,29 @@ void	fix_player_pos(t_camera *cam)
 
 void	change_player_pos(t_camera *cam, int **world_map, t_coord temp)
 {
-	if (world_map[(int)(cam->player_y + cam->player_dy + temp.y)]
-				[(int)(cam->player_x + cam->player_dx + temp.x)] != 1)
+	int ret;
+
+	ret = world_map[(int)(cam->player_y + cam->player_dy + temp.y)]
+				[(int)(cam->player_x + cam->player_dx + temp.x)];
+	if (ret != 1 && ret != -2)
 	{
 		cam->player_dx += temp.x;
 		cam->player_dy += temp.y;
-		fix_player_pos(cam);
-		return ;
+		return (fix_player_pos(cam));
 	}
-	if (world_map[(int)(cam->player_y + cam->player_dy + temp.y)]
-				[(int)(cam->player_x + cam->player_dx)] != 1)
+	ret = world_map[(int)(cam->player_y + cam->player_dy + temp.y)]
+				[(int)(cam->player_x + cam->player_dx)];
+	if (ret != 1 && ret != -2)
 	{
 		cam->player_dy += temp.y;
-		fix_player_pos(cam);
-		return ;
+		return (fix_player_pos(cam));
 	}
-	if (world_map[(int)(cam->player_y + cam->player_dy)]
-				[(int)(cam->player_x + cam->player_dx + temp.x)] != 1)
+	ret = world_map[(int)(cam->player_y + cam->player_dy)]
+				[(int)(cam->player_x + cam->player_dx + temp.x)];
+	if (ret != 1 && ret != -2)
 	{
 		cam->player_dx += temp.x;
-		fix_player_pos(cam);
+		return (fix_player_pos(cam));
 	}
 }
 

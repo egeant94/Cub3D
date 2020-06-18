@@ -70,3 +70,32 @@ int		check_line(char *line)
 	}
 	return (0);
 }
+
+void	free_tex(t_mlx_data *mlx, t_settings *set)
+{
+	if (set->north.img != 0)
+		mlx_destroy_image(mlx->mlx, set->north.img);
+	if (set->south.img != 0)
+		mlx_destroy_image(mlx->mlx, set->south.img);
+	if (set->west.img != 0)
+		mlx_destroy_image(mlx->mlx, set->west.img);
+	if (set->east.img != 0)
+		mlx_destroy_image(mlx->mlx, set->east.img);
+	if (set->sprite.img != 0)
+		mlx_destroy_image(mlx->mlx, set->sprite.img);
+}
+
+void	finish_file(t_mlx_data *mlx)
+{
+	int ret;
+
+	ret = get_next_line(mlx->cub_fd, &mlx->line);
+	while (ret != 0)
+	{
+		if (ret == -1)
+			return ;
+		free_line(&mlx->line);
+		ret = get_next_line(mlx->cub_fd, &mlx->line);
+	}
+	free_line(&mlx->line);
+}

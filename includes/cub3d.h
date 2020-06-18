@@ -192,4 +192,6 @@ int				check_map(t_mlx_data *mlx);
 int				save_bmp(t_mlx_data *mlx);
 int				unknown_key(char *line);
 int				check_line(char *line);
+void			free_tex(t_mlx_data *mlx, t_settings *set);
+void			finish_file(t_mlx_data *mlx);
 #endif

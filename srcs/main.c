@@ -62,6 +62,7 @@ int		main(int argc, char **argv)
 	init_movements(&move);
 	mlx.cam = &cam;
 	mlx.move = &move;
+	mlx.set = &set;
 	if (init_settings(&set, &mlx, argc, argv))
 	{
 		quit(&mlx);

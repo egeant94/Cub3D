@@ -39,8 +39,6 @@ void	free_all(t_mlx_data *mlx, t_camera *cam)
 		free(cam->sprite_dists);
 		cam->sprite_dists = 0;
 	}
-	free_line(&mlx->line);
-	split_free(mlx);
 }
 
 int		key_press(int keycode, t_mlx_data *mlx)
@@ -104,10 +102,15 @@ int		renderer(t_mlx_data *mlx)
 int		quit(t_mlx_data *mlx)
 {
 	free_all(mlx, mlx->cam);
+	free_line(&mlx->line);
+	split_free(mlx);
+	finish_file(mlx);
 	close(mlx->cub_fd);
 	free_map(mlx);
+	free_tex(mlx, mlx->set);
 	if (mlx->mlx != 0 && mlx->win != 0)
 		mlx_destroy_window(mlx->mlx, mlx->win);
+	free(mlx->mlx);
 	exit(0);
 	return (1);
 }

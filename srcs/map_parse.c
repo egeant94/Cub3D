@@ -21,16 +21,15 @@ int			get_map(int ret, t_mlx_data *mlx)
 	if ((mlx->world_map[0] = line_to_arr(mlx)) == 0)
 		return (1);
 	mlx->world_map[1] = 0;
-	ret = get_next_line(mlx->cub_fd, &mlx->line);
 	i = 1;
 	while (ret != 0)
 	{
+		ret = get_next_line(mlx->cub_fd, &mlx->line);
 		if (realloc_map(mlx, 1))
 			return (1);
 		if ((mlx->world_map[i] = line_to_arr(mlx)) == 0)
 			return (1);
 		i++;
-		ret = get_next_line(mlx->cub_fd, &mlx->line);
 	}
 	if (format_map(mlx))
 		return (1);

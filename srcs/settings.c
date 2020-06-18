@@ -49,14 +49,15 @@ int			init_settings(t_settings *set, t_mlx_data *mlx, int argc,
 		return (1);
 	if (verify_settings(set, mlx))
 		return (1);
+	if (set->s_width == -1 || set->s_height == -1)
+		return (print_error("Resolution is missing"));
 	set->wall_height = (float)set->s_width / (float)set->s_height / 3.0;
 	mlx->cam_speed = 9 * ((set->s_width * set->s_height) / (1280.0 * 720.0))
 					* SPEED;
 	if (mlx->cam_speed <= 0)
 		mlx->cam_speed = 1;
-	mlx->cam->movement_speed = 8 * ((1280.0 * 720.0) /
+	mlx->cam->movement_speed = 9 * ((1280.0 * 720.0) /
 								(set->s_width * set->s_height));
-	mlx->set = set;
 	if (argc > 2)
 		if (save_bmp(mlx))
 			return (1);

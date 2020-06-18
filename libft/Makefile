@@ -22,14 +22,14 @@ SRCS	= ft_putnbr_fd.c ft_putendl_fd.c ft_putstr_fd.c ft_putchar_fd.c	\
 CFLAGS	= -Wall -Wextra -Werror
 CC		= gcc
 OBJS	= ${SRCS:.c=.o}
-NAME	= libft.a
+NAME	= libft
 RM		= rm -f
 HEADERS	= .
 
-all:	${NAME}
+all:	${NAME}.a
 
-$(NAME):	${OBJS} 
-			ar rc ${NAME} ${OBJS}
+$(NAME).a:	${OBJS}
+			ar rc ${NAME}.a ${OBJS}
 			
 .c.o:
 		${CC} ${CFLAGS} -I ${HEADERS} -c $< -o ${<:.c=.o}
@@ -38,7 +38,7 @@ clean:
 		${RM} ${OBJS}
 
 fclean: clean
-		${RM} ${NAME}
+		${RM} ${NAME}.a
 
 re:	fclean all
 

@@ -23,29 +23,30 @@ LIBFT	= ./libft/libft.a
 MLXFLAGS= -L./minilibx_linux -lm -lmlx_Linux -lbsd -lXext -lX11
 CFLAGS	= -Wall -Wextra -Werror
 CC		= gcc
-NAME	= Cub3d
+NAME	= cub
+EXT		= 3D
 RM		= rm -f
 
-all:	$(NAME)
+all:	$(NAME)$(EXT)
 
-$(NAME):	$(OBJS)
-			@make -C libft
-			@make -C minilibx_linux
-			@gcc $(CFLAGS) $(OBJS) $(MLXFLAGS) $(LIBFT) -o $(NAME)
+$(NAME)$(EXT)	:	$(OBJS)
+					make -C minilibx_linux
+					make -C libft
+					gcc $(CFLAGS) $(OBJS) $(MLXFLAGS) $(LIBFT) -o $(NAME)$(EXT)
 			
 $(ODIR)%.o: $(SDIR)%.c
 		@mkdir -p $(ODIR)
-		@$(CC) $(MLXFLAGS) $(CFLAGS) -c $< -I $(HEADERS) -o $@
+		$(CC) $(MLXFLAGS) $(CFLAGS) -c $< -I $(HEADERS) -o $@
 
 clean:
-		@$(RM) $(OBJS)
-		@rm -rf $(ODIR)
-		@make clean -C libft
+		$(RM) $(OBJS)
+		rm -rf $(ODIR)
+		make clean -C libft
 
 fclean: clean
-		@$(RM) $(NAME)
-		@make fclean -C libft
-		@make clean -C minilibx_linux
+		$(RM) $(NAME)$(EXT)
+		make fclean -C libft
+		make clean -C minilibx_linux
 
 re:	fclean all
 
