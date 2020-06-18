@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Cub3D.h                                            :+:      :+:    :+:   */
+/*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: user42 <user42@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/17 09:21:38 by osboxes           #+#    #+#             */
-/*   Updated: 2020/06/11 10:24:06 by user42           ###   ########.fr       */
+/*   Updated: 2020/06/18 12:17:36 by user42           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -194,4 +194,5 @@ int				unknown_key(char *line);
 int				check_line(char *line);
 void			free_tex(t_mlx_data *mlx, t_settings *set);
 void			finish_file(t_mlx_data *mlx);
+int				ft_custom_atoi(char *str);
 #endif

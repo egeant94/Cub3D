@@ -64,12 +64,12 @@ void		set_rgb(int *r, int *g, int *b, t_mlx_data *mlx)
 	int i;
 
 	i = 0;
-	*r = ft_atoi(mlx->line + 1);
+	*r = ft_custom_atoi(mlx->line + 1);
 	while (mlx->line[i] != 0)
 	{
 		if (mlx->line[i] == ',')
 		{
-			*g = ft_atoi(mlx->line + i + 1);
+			*g = ft_custom_atoi(mlx->line + i + 1);
 			i++;
 			break ;
 		}
@@ -79,7 +79,7 @@ void		set_rgb(int *r, int *g, int *b, t_mlx_data *mlx)
 	{
 		if (mlx->line[i] == ',')
 		{
-			*b = ft_atoi(mlx->line + i + 1);
+			*b = ft_custom_atoi(mlx->line + i + 1);
 			break ;
 		}
 		i++;
